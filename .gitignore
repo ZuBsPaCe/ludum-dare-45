@@ -260,3 +260,8 @@ Temp/
 arrow-man*.csproj
 arrow-man*.sln
 web/zubspace.com/public/
+
+
+
+# Krita
+*.kra-autosave.kra
