@@ -10,6 +10,9 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private Transform _followObject = null;
 
+        [SerializeField]
+        private Transform[] _followObjects = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
@@ -26,7 +29,29 @@ namespace zs.Assets.Scripts
         public Transform FollowObject
         {
             get { return _followObject; }
-            set { _followObject = value; }
+            set
+            {
+                _followObjects = null;
+                _followObject = value;
+            }
+        }
+
+        public Transform[] FollowObjects
+        {
+            get { return _followObjects; }
+            set
+            {
+                _followObject = null;
+
+                if (value == null || value.Length == 0)
+                {
+                    _followObjects = null;
+                }
+                else
+                {
+                    _followObjects = value;
+                }
+            }
         }
 
         #endregion Public Methods
@@ -46,12 +71,21 @@ namespace zs.Assets.Scripts
 	
         void LateUpdate()
         {
-            if (_followObject == null)
+            if (_followObject != null)
             {
-                return;
+                transform.position = _followObject.position.with_z(transform.position.z);
             }
+            else if (_followObjects != null)
+            {
+                Vector3 center = Vector3.zero;
+                foreach (Transform followObject in _followObjects)
+                {
+                    center += followObject.position;
+                }
 
-            transform.position = _followObject.position.with_z(transform.position.z);
+                center /= _followObjects.Length;
+                transform.position = center.with_z(transform.position.z);
+            }
         }
 
         #endregion MonoBehaviour

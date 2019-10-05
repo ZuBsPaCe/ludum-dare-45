@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -41,6 +42,9 @@ namespace zs.Assets.Scripts
         private int _initialLevel = 0;
 
         [SerializeField]
+        private int _playerCount = 1;
+
+        [SerializeField]
         private Difficulty _initialDifficulty = Difficulty.Hard;
 
         [SerializeField]
@@ -51,6 +55,7 @@ namespace zs.Assets.Scripts
         #region Private Vars
 
         private List<Player> _players = new List<Player>();
+        private List<Sheep> _sheep = new List<Sheep>();
 
         #endregion Private Vars
 
@@ -120,8 +125,14 @@ namespace zs.Assets.Scripts
             {
                 DestroyImmediate(player.gameObject);
             }
-
             _players.Clear();
+
+            foreach (Sheep sheep in _sheep)
+            {
+                DestroyImmediate(sheep.gameObject);
+            }
+            _sheep.Clear();
+
 
             // Reset Tilemaps
             _baseTilemap.ClearAllTiles();
@@ -142,7 +153,7 @@ namespace zs.Assets.Scripts
                 width += 2 * level;
                 height += 2 * level;
             }
-            else if (difficulty == Difficulty.Hard)
+            else
             {
                 width += 3 * level;
                 height += 3 * level;
@@ -256,7 +267,8 @@ namespace zs.Assets.Scripts
                         {
                             for (int patchX = x - patchWidth / 2; patchX <= x + patchWidth / 2; ++patchX)
                             {
-                                if (!map.IsValid(patchX, patchY))
+                                if (!map.IsValid(patchX, patchY) ||
+                                    map.GetTile(patchX, patchY) != TileType.Outside)
                                 {
                                     continue;
                                 }
@@ -272,13 +284,217 @@ namespace zs.Assets.Scripts
                 }
             }
 
-
             // Add outside border
             map.AddBorder(_borderSize, TileType.Outside);
+            
+
+            // Cleanup: Remove small Patches of Outside Grass
+            //{
+            //    int outsideCount;
+            //    const int removeCriteria = 3;
+
+            //    for (int y = 0; y < map.Height; ++y)
+            //    {
+            //        outsideCount = _borderSize;
+            //        for (int x = 0; x < map.Width; ++x)
+            //        {
+            //            if (map.GetTile(x, y) == TileType.Grass)
+            //            {
+            //                if (outsideCount > 0 && outsideCount <= removeCriteria)
+            //                {
+            //                    int removeX = x - 1;
+            //                    while (map.GetTile(removeX, y) == TileType.Outside)
+            //                    {
+            //                        map.SetTile(removeX, x, TileType.Grass);
+            //                        removeX -= 1;
+            //                    }
+            //                }
+
+            //                outsideCount = 0;
+            //            }
+            //            else
+            //            {
+            //                Debug.Assert(map.GetTile(x, y) == TileType.Outside);
+            //                outsideCount += 1;
+            //            }
+            //        }
+            //    }
+
+            //    for (int x = 0; x < map.Width; ++x)
+            //    {
+            //        outsideCount = _borderSize;
+            //        for (int y = 0; y < map.Height; ++y)
+            //        {
+            //            if (map.GetTile(x, y) == TileType.Grass)
+            //            {
+            //                if (outsideCount > 0 && outsideCount <= removeCriteria)
+            //                {
+            //                    int removeY = y - 1;
+            //                    while (map.GetTile(x, removeY) == TileType.Outside)
+            //                    {
+            //                        map.SetTile(x, removeY, TileType.Grass);
+            //                        removeY -= 1;
+            //                    }
+            //                }
+
+            //                outsideCount = 0;
+            //            }
+            //            else
+            //            {
+            //                Debug.Assert(map.GetTile(x, y) == TileType.Outside);
+            //                outsideCount += 1;
+            //            }
+            //        }
+            //    }
+            //}
+
+
+            
+            
+            // Add Player / Players
+            Vector2Int center = new Vector2Int(map.Width / 2, map.Width / 2);
+            int minSpawnX = center.x - 4;
+            int maxSpawnX = center.x + 4;
+            int minSpawnY = center.y - 4;
+            int maxSpawnY = center.y + 4;
+
+            {
+                if (_playerCount <= 1)
+                {
+                    map.SetTile(center.x, center.y, TileType.StartTile);
+                }
+                else if (_playerCount == 2)
+                {
+                    map.SetTile(center.x - 2, center.y, TileType.StartTile);
+                    map.SetTile(center.x + 2, center.y, TileType.StartTile);
+                }
+                else
+                {
+                    int restPlayers;
+                    float radius;
+
+                    if (_playerCount <= 3)
+                    {
+                        radius = 1;
+                        restPlayers = _playerCount;
+                    }
+                    else
+                    {
+                        map.SetTile(center.x, center.y, TileType.StartTile);
+                        radius = 2;
+                        restPlayers = _playerCount - 1;
+                    }
+
+                    float angle = 360f / restPlayers;
+                    float currentAngle = Random.Range(0, 360);
+
+                    for (int i = 0; i < restPlayers; ++i)
+                    {
+                        Vector2 v = Quaternion.Euler(0, 0, currentAngle) * Vector2.up;
+                        v *= radius;
+
+                        int shiftx;
+
+                        if (Mathf.Abs(v.x) <= 0.5f)
+                        {
+                            shiftx = 0;
+                        }
+                        else
+                        {
+                            shiftx = v.x > 0 ? Mathf.CeilToInt(v.x) : Mathf.FloorToInt(v.x);
+                        }
+
+                        int shifty;
+
+                        if (Mathf.Abs(v.y) <= 0.5f)
+                        {
+                            shifty = 0;
+                        }
+                        else
+                        {
+                            shifty = v.y > 0 ? Mathf.CeilToInt(v.y) : Mathf.FloorToInt(v.y);
+                        }
+
+                        int x = center.x + shiftx;
+                        int y = center.y + shifty;
+
+                        map.SetTile(x, y, TileType.StartTile);
+
+                        minSpawnX = Mathf.Min(minSpawnX, x);
+                        maxSpawnX = Mathf.Max(maxSpawnX, x);
+
+                        minSpawnY = Mathf.Min(minSpawnY, y);
+                        maxSpawnY = Mathf.Max(maxSpawnY, y);
+
+                        currentAngle += angle;
+                    }
+                }
+
+                //// Ensure that players are inside of a grass patch.
+
+                //for (int x = minSpawnX; x <= maxSpawnX; ++x)
+                //{
+                //    for (int y = minSpawnY; y <= maxSpawnY; ++y)
+                //    {
+                //        if (map.GetTile(x, y) != TileType.StartTile)
+                //        {
+                //            map.SetTile(x, y, TileType.Grass);
+                //        }
+                //    }
+                //}
+            }
+
+
+            // Add Sheep
+            {
+                int sheepCount;
+                    
+                if (difficulty == Difficulty.Easy)
+                {
+                    sheepCount = level + 1;
+                }
+                else if (difficulty == Difficulty.Normal)
+                {
+                    sheepCount = Mathf.FloorToInt(level * 1.5f) + 1;
+                }
+                else
+                {
+                    sheepCount = level * 2 + 1;
+                }
+
+                int addedSheeps = 0;
+                int failCount = 0;
+
+                while (addedSheeps < sheepCount && failCount < 1000)
+                {
+                    failCount += 1;
+
+                    int x = Random.Range(0, map.Width);
+                    int y = Random.Range(0, map.Height);
+
+                    if (x >= minSpawnX && x <= maxSpawnX &&
+                        y >= minSpawnY && y <= maxSpawnY)
+                    {
+                        continue;
+                    }
+
+                    if (map.GetTile(x, y) != TileType.Grass)
+                    {
+                        continue;
+                    }
+
+                    map.SetTile(x, y, TileType.SheepTile);
+                    addedSheeps += 1;
+                    failCount = 0;
+                }
+            }
+
 
 
             // Add fences
             {
+                List<Vector2Int> fencePositions = new List<Vector2Int>();
+
                 for (int y = 0; y < map.Height; ++y)
                 {
                     for (int x = 0; x < map.Width; ++x)
@@ -286,52 +502,43 @@ namespace zs.Assets.Scripts
                         if (map.GetTile(x, y) == TileType.Outside)
                         {
                             if (map.IsValid(x, y - 1) &&
-                                map.GetTile(x, y - 1) == TileType.Grass)
+                                map.GetTile(x, y - 1) != TileType.Outside)
                             {
                                 // South Grass
-                                map.SetTile(x, y, TileType.Fence);
+                                fencePositions.Add(new Vector2Int(x, y));
                             }
                             else if (map.IsValid(x, y + 1) &&
-                                     map.GetTile(x, y + 1) == TileType.Grass)
+                                     map.GetTile(x, y + 1) != TileType.Outside)
                             {
                                 // North Grass
-                                map.SetTile(x, y, TileType.Fence);
+                                fencePositions.Add(new Vector2Int(x, y));
                             }
                             else if (map.IsValid(x + 1, y) &&
-                                map.GetTile(x + 1, y) == TileType.Grass)
+                                     map.GetTile(x + 1, y) != TileType.Outside)
                             {
                                 // East Grass
-                                map.SetTile(x, y, TileType.Fence);
+                                fencePositions.Add(new Vector2Int(x, y));
                             }
                             else if (map.IsValid(x - 1, y) &&
-                                     map.GetTile(x - 1, y) == TileType.Grass)
+                                     map.GetTile(x - 1, y) != TileType.Outside)
                             {
                                 // West Grass
-                                map.SetTile(x, y, TileType.Fence);
+                                fencePositions.Add(new Vector2Int(x, y));
                             }
                         }
                     }
                 }
-            }
 
-
-            // Add Player
-            {
-                while (true)
+                foreach (Vector2Int fencePosition in fencePositions)
                 {
-                    int x = Random.Range(0, map.Width);
-                    int y = Random.Range(0, map.Height);
-
-                    if (map.IsTileSurroundedBy(x, y, TileType.Grass))
-                    {
-                        map.SetTile(x, y, TileType.StartTile);
-                        break;
-                    }
+                    map.SetTile(fencePosition.x, fencePosition.y, TileType.Fence);
                 }
             }
 
             // Generate Real TileMap
             {
+                List<Transform> playerTransforms = new List<Transform>();
+
                 for (int y = 0; y < map.Height; ++y)
                 {
                     for (int x = 0; x < map.Width; ++x)
@@ -349,22 +556,22 @@ namespace zs.Assets.Scripts
                             case TileType.Fence:
                                 _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
 
-                                if (map.GetTile(x, y - 1) == TileType.Grass)
+                                if (map.GetTile(x, y - 1) != TileType.Outside)
                                 {
                                     // South Grass
                                     _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceHorTile);
                                 }
-                                else if (map.GetTile(x, y + 1) == TileType.Grass)
+                                else if (map.GetTile(x, y + 1) != TileType.Outside)
                                 {
                                     // North Grass
                                     _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceHorTile);
                                 }
-                                else if (map.GetTile(x + 1, y) == TileType.Grass)
+                                else if (map.GetTile(x + 1, y) != TileType.Outside)
                                 {
                                     // East Grass
                                     _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceVerTile);
                                 }
-                                else if (map.GetTile(x - 1, y) == TileType.Grass)
+                                else if (map.GetTile(x - 1, y) != TileType.Outside)
                                 {
                                     // West Grass
                                     _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceVerTile);
@@ -377,8 +584,19 @@ namespace zs.Assets.Scripts
 
                                 Player player = Instantiate(_playerPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
                                 _players.Add(player);
-                                FollowCamera.Instance.FollowObject = player.transform;
+                                playerTransforms.Add(player.transform);
+
                                 break;
+
+                            case TileType.SheepTile:
+                                map.SetTile(x, y, TileType.Grass);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+
+                                Sheep sheep = Instantiate(_sheepPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                                _sheep.Add(sheep);
+
+                                break;
+
 
                             default:
                                 Debug.Assert(false, "Unknown Tile Type");
@@ -387,6 +605,8 @@ namespace zs.Assets.Scripts
 
                     }
                 }
+
+                FollowCamera.Instance.FollowObjects = playerTransforms.ToArray();
             }
         }
 
