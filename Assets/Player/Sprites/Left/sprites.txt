@@ -1,0 +1,43 @@
+{"frames": {
+	"Player Arm Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":128,"y":154,"w":36,"h":34},
+		"spriteSourceSize": {"x":128,"y":129,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	},
+	"Player Body Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":0,"y":0,"w":124,"h":220},
+		"spriteSourceSize": {"x":63,"y":11,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	},
+	"Player Eyes Open Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":128,"y":113,"w":40,"h":37},
+		"spriteSourceSize": {"x":96,"y":76,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	},
+	"Player Hair Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":128,"y":0,"w":74,"h":73},
+		"spriteSourceSize": {"x":117,"y":5,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	},
+	"Player Leg Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":128,"y":192,"w":32,"h":34},
+		"spriteSourceSize": {"x":119,"y":221,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	},
+	"Player Tail Left.png":{
+		"rotated": false,"trimmed": true,
+		"frame": {"x":128,"y":77,"w":49,"h":32},
+		"spriteSourceSize": {"x":168,"y":183,"w":256,"h":256},
+		"sourceSize": {"w":256,"h":256}
+	}
+},
+"meta": {
+	"app": "ShoeBox",
+	"size": {"w":256,"h":256}
+}
+}

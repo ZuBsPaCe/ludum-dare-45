@@ -265,3 +265,7 @@ web/zubspace.com/public/
 
 # Krita
 *.kra-autosave.kra
+
+
+# Unity Assets
+Puppet2D/

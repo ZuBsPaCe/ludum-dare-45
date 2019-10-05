@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\FollowCamera.cs" />
     <Compile Include="Assets\Scripts\PhysicSync.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
+    <None Include="Assets\Player\Sprites\Left\sprites.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/code/personal/github.com/ludum-dare-45/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
