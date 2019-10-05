@@ -9,9 +9,13 @@ namespace zs.Assets.Scripts
     public enum TileType
     {
         Outside,
-        Grass,
-        Fence,
+        Open,
+        Blocked,
 
+
+        // Only available during generation
+        Fence,
+        Rock,
         StartTile,
         SheepTile
     }

@@ -22,6 +22,9 @@ namespace zs.Assets.Scripts
         private bool _walkLeft = false;
         private bool _walkRight = false;
 
+        private Vector2 _velocity = Vector2.zero;
+        //private Vector2Int _lastTile = Vector2Int.zero;
+
         #endregion Private Vars
 
         #region Public Vars
@@ -44,48 +47,172 @@ namespace zs.Assets.Scripts
 
         void Start()
         {
+            if (Random.value < 0.5f)
+            {
+                // Horizontal movement
+
+                if (transform.position.x > 0)
+                {
+                    _velocity = Vector2.right * _speed;
+                }
+                else
+                {
+                    _velocity = Vector2.left * _speed;
+                }
+            }
+            else
+            {
+                // Vertical movement
+
+                if (transform.position.y > 0)
+                {
+                    _velocity = Vector2.up * _speed;
+                }
+                else
+                {
+                    _velocity = Vector2.down * _speed;
+                }
+            }
+
+            //_lastTile = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
         }
 	
         void Update()
         {
-            Vector2 velocity = Vector2.zero;
+            Map map = Game.Instance.Map;
 
-            //float horAxis = Input.GetAxisRaw("Horizontal");
-            //float verAxis = Input.GetAxisRaw("Vertical");
+            Vector2Int currentTile = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
 
-            //if (horAxis > 0)
-            //{
-            //    velocity.x += 1;
-            //}
+            float inTileX = transform.position.x - currentTile.x;
+            float inTileY = transform.position.y - currentTile.y;
 
-            //if (horAxis < 0)
-            //{
-            //    velocity.x -= 1;
-            //}
 
-            var horAxis = 0;
-            var verAxis = 0;
-
-            if (verAxis > 0)
+            if (_velocity.x > 0)
             {
-                velocity.y += 1;
+                if (inTileX >= 0.5f)
+                {
+                    if (map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Blocked)
+                    {
+                        float rand = Random.value;
+                        if (rand < 1f / 3f &&
+                            map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Open)
+                        {
+                            _velocity.x = 0;
+                            _velocity.y = 1;
+                        }
+                        else if (rand < 2f / 3f &&
+                            map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Open)
+
+                        {
+                            _velocity.x = 0;
+                            _velocity.y = -1;
+                        }
+                        else
+                        {
+                            _velocity.x = -1;
+                        }
+
+                        transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
+                    }
+                }
+            }
+            else if (_velocity.x < 0)
+            {
+                if (inTileX < 0.5f)
+                {
+                    if (map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Blocked)
+                    {
+                        float rand = Random.value;
+                        if (rand < 1f / 3f &&
+                            map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Open)
+                        {
+                            _velocity.x = 0;
+                            _velocity.y = 1;
+                        }
+                        else if (rand < 2f / 3f &&
+                                 map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Open)
+
+                        {
+                            _velocity.x = 0;
+                            _velocity.y = -1;
+                        }
+                        else
+                        {
+                            _velocity.x = 1;
+                        }
+
+                        transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
+                    }
+                }
+            }
+            else if (_velocity.y > 0)
+            {
+                if (inTileY >= 0.5f)
+                {
+                    if (map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Blocked)
+                    {
+                        float rand = Random.value;
+                        if (rand < 1f / 3f &&
+                            map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Open)
+                        {
+                            _velocity.x = 1;
+                            _velocity.y = 0;
+                        }
+                        else if (rand < 2f / 3f &&
+                                 map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Open)
+
+                        {
+                            _velocity.x = -1;
+                            _velocity.y = 0;
+                        }
+                        else
+                        {
+                            _velocity.y = -1;
+                        }
+
+                        transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
+                    }
+                }
+            }
+            else if (_velocity.y < 0)
+            {
+                if (map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Blocked)
+                {
+                    float rand = Random.value;
+                    if (rand < 1f / 3f &&
+                        map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Open)
+                    {
+                        _velocity.x = 1;
+                        _velocity.y = 0;
+                    }
+                    else if (rand < 2f / 3f &&
+                             map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Open)
+
+                    {
+                        _velocity.x = -1;
+                        _velocity.y = 0;
+                    }
+                    else
+                    {
+                        _velocity.y = 1;
+                    }
+
+                    transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
+                }
             }
 
-            if (verAxis < 0)
-            {
-                velocity.y -= 1;
-            }
+
 
             bool walkLeft = false;
             bool walkRight = false;
 
 
-            if (velocity.x > 0)
+            if (_velocity.x > 0)
             {
                 walkRight = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(1);
             }
-            else if (velocity.x < 0)
+            else if (_velocity.x < 0)
             {
                 walkLeft = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(-1);
@@ -104,10 +231,95 @@ namespace zs.Assets.Scripts
             }
 
 
-            velocity = velocity.normalized * _speed;
+            _velocity = _velocity.normalized * _speed;
 
-            _rigidbody.velocity = velocity;
+            _rigidbody.velocity = _velocity;
         }
+
+
+
+        //private void OnCollisionEnter2D(Collision2D collision)
+        //{
+        //    Vector2 relativeVelocity = collision.relativeVelocity;
+
+        //    if (_velocity.x > 0)
+        //    {
+        //        if (relativeVelocity.x < 0)
+        //        {
+        //            float rand = Random.value;
+        //            if (rand < 1f / 3f)
+        //            {
+        //                _velocity.x -= 1;
+        //            }
+        //            else if (rand < 2f / 3f)
+        //            {
+        //                _velocity.y -= 1;
+        //            }
+        //            else
+        //            {
+        //                _velocity.y = 1;
+        //            }
+        //        }
+        //    }
+        //    else if (_velocity.x < 0)
+        //    {
+        //        if (relativeVelocity.x > 0)
+        //        {
+        //            float rand = Random.value;
+        //            if (rand < 1f / 3f)
+        //            {
+        //                _velocity.x = 1;
+        //            }
+        //            else if (rand < 2f / 3f)
+        //            {
+        //                _velocity.y -= 1;
+        //            }
+        //            else
+        //            {
+        //                _velocity.y = 1;
+        //            }
+        //        }
+        //    }
+        //    else if (_velocity.y > 0)
+        //    {
+        //        if (relativeVelocity.y < 0)
+        //        {
+        //            float rand = Random.value;
+        //            if (rand < 1f / 3f)
+        //            {
+        //                _velocity.y -= 1;
+        //            }
+        //            else if (rand < 2f / 3f)
+        //            {
+        //                _velocity.x -= 1;
+        //            }
+        //            else
+        //            {
+        //                _velocity.x = 1;
+        //            }
+        //        }
+        //    }
+        //    else if (_velocity.y < 0)
+        //    {
+        //        if (relativeVelocity.y > 0)
+        //        {
+        //            float rand = Random.value;
+        //            if (rand < 1f / 3f)
+        //            {
+        //                _velocity.y = 1;
+        //            }
+        //            else if (rand < 2f / 3f)
+        //            {
+        //                _velocity.x -= 1;
+        //            }
+        //            else
+        //            {
+        //                _velocity.x = 1;
+        //            }
+        //        }
+        //    }
+        //}
+
 
         #endregion MonoBehaviour
 
