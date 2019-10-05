@@ -14,7 +14,14 @@ namespace zs.Assets.Scripts
 
 
         // Only available during generation
-        Fence,
+        FenceN,
+        FenceNW,
+        FenceW,
+        FenceSW,
+        FenceS,
+        FenceSE,
+        FenceE,
+        FenceNE,
         Rock,
         StartTile,
         SheepTile

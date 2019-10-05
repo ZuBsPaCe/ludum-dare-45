@@ -94,13 +94,13 @@ namespace zs.Assets.Scripts
                     if (map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Blocked)
                     {
                         float rand = Random.value;
-                        if (rand < 1f / 3f &&
+                        if (rand < 2f / 5f &&
                             map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Open)
                         {
                             _velocity.x = 0;
                             _velocity.y = 1;
                         }
-                        else if (rand < 2f / 3f &&
+                        else if (rand < 4f / 5f &&
                             map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Open)
 
                         {
@@ -123,13 +123,13 @@ namespace zs.Assets.Scripts
                     if (map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Blocked)
                     {
                         float rand = Random.value;
-                        if (rand < 1f / 3f &&
+                        if (rand < 2f / 5f &&
                             map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Open)
                         {
                             _velocity.x = 0;
                             _velocity.y = 1;
                         }
-                        else if (rand < 2f / 3f &&
+                        else if (rand < 4f / 5f &&
                                  map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Open)
 
                         {
@@ -152,13 +152,13 @@ namespace zs.Assets.Scripts
                     if (map.GetTile(currentTile.x, currentTile.y + 1) == TileType.Blocked)
                     {
                         float rand = Random.value;
-                        if (rand < 1f / 3f &&
+                        if (rand < 2f / 5f &&
                             map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Open)
                         {
                             _velocity.x = 1;
                             _velocity.y = 0;
                         }
-                        else if (rand < 2f / 3f &&
+                        else if (rand < 4f / 5f &&
                                  map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Open)
 
                         {
@@ -176,28 +176,30 @@ namespace zs.Assets.Scripts
             }
             else if (_velocity.y < 0)
             {
-                if (map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Blocked)
+                if (inTileY < 0.5f)
                 {
-                    float rand = Random.value;
-                    if (rand < 1f / 3f &&
-                        map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Open)
+                    if (map.GetTile(currentTile.x, currentTile.y - 1) == TileType.Blocked)
                     {
-                        _velocity.x = 1;
-                        _velocity.y = 0;
-                    }
-                    else if (rand < 2f / 3f &&
-                             map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Open)
+                        float rand = Random.value;
+                        if (rand < 2f / 5f &&
+                            map.GetTile(currentTile.x + 1, currentTile.y) == TileType.Open)
+                        {
+                            _velocity.x = 1;
+                            _velocity.y = 0;
+                        }
+                        else if (rand < 4f / 5f &&
+                                 map.GetTile(currentTile.x - 1, currentTile.y) == TileType.Open)
+                        {
+                            _velocity.x = -1;
+                            _velocity.y = 0;
+                        }
+                        else
+                        {
+                            _velocity.y = 1;
+                        }
 
-                    {
-                        _velocity.x = -1;
-                        _velocity.y = 0;
+                        transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
                     }
-                    else
-                    {
-                        _velocity.y = 1;
-                    }
-
-                    transform.position = new Vector3(currentTile.x + 0.5f, currentTile.y + 0.5f, transform.position.z);
                 }
             }
 
