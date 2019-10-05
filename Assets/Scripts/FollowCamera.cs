@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditorInternal;
+using UnityEngine;
 
 namespace zs.Assets.Scripts
 {
@@ -15,6 +16,9 @@ namespace zs.Assets.Scripts
         #endregion Private Vars
 
         #region Public Vars
+
+        public static FollowCamera Instance { get; private set; }
+
         #endregion Public Vars
 
         #region Public Methods
@@ -32,6 +36,8 @@ namespace zs.Assets.Scripts
         void Awake()
         {
             Debug.Assert(_followObject);
+
+            Instance = this;
         }
 
         void Start()

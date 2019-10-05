@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -28,6 +29,12 @@ namespace zs.Assets.Scripts
         private TileBase[] _grassTiles = null;
 
         [SerializeField]
+        private TileBase _fenceHorTile = null;
+
+        [SerializeField]
+        private TileBase _fenceVerTile = null;
+
+        [SerializeField]
         private int _initialSeed = 0;
 
         [SerializeField]
@@ -42,6 +49,9 @@ namespace zs.Assets.Scripts
         #endregion Serializable Fields
 
         #region Private Vars
+
+        private List<Player> _players = new List<Player>();
+
         #endregion Private Vars
 
         #region Public Vars
@@ -78,6 +88,9 @@ namespace zs.Assets.Scripts
             Debug.Assert(_outsideTiles != null && _outsideTiles.Length > 0);
             Debug.Assert(_grassTiles != null && _grassTiles.Length > 0);
 
+            Debug.Assert(_fenceHorTile);
+            Debug.Assert(_fenceVerTile);
+
             Instance = this;
         }
 
@@ -100,6 +113,15 @@ namespace zs.Assets.Scripts
 
 
             Random.InitState(seed);
+
+
+            // Reset GameObjects
+            foreach (Player player in _players)
+            {
+                DestroyImmediate(player.gameObject);
+            }
+
+            _players.Clear();
 
             // Reset Tilemaps
             _baseTilemap.ClearAllTiles();
@@ -255,6 +277,59 @@ namespace zs.Assets.Scripts
             map.AddBorder(_borderSize, TileType.Outside);
 
 
+            // Add fences
+            {
+                for (int y = 0; y < map.Height; ++y)
+                {
+                    for (int x = 0; x < map.Width; ++x)
+                    {
+                        if (map.GetTile(x, y) == TileType.Outside)
+                        {
+                            if (map.IsValid(x, y - 1) &&
+                                map.GetTile(x, y - 1) == TileType.Grass)
+                            {
+                                // South Grass
+                                map.SetTile(x, y, TileType.Fence);
+                            }
+                            else if (map.IsValid(x, y + 1) &&
+                                     map.GetTile(x, y + 1) == TileType.Grass)
+                            {
+                                // North Grass
+                                map.SetTile(x, y, TileType.Fence);
+                            }
+                            else if (map.IsValid(x + 1, y) &&
+                                map.GetTile(x + 1, y) == TileType.Grass)
+                            {
+                                // East Grass
+                                map.SetTile(x, y, TileType.Fence);
+                            }
+                            else if (map.IsValid(x - 1, y) &&
+                                     map.GetTile(x - 1, y) == TileType.Grass)
+                            {
+                                // West Grass
+                                map.SetTile(x, y, TileType.Fence);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            // Add Player
+            {
+                while (true)
+                {
+                    int x = Random.Range(0, map.Width);
+                    int y = Random.Range(0, map.Height);
+
+                    if (map.IsTileSurroundedBy(x, y, TileType.Grass))
+                    {
+                        map.SetTile(x, y, TileType.StartTile);
+                        break;
+                    }
+                }
+            }
+
             // Generate Real TileMap
             {
                 for (int y = 0; y < map.Height; ++y)
@@ -272,6 +347,37 @@ namespace zs.Assets.Scripts
                                 break;
 
                             case TileType.Fence:
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+
+                                if (map.GetTile(x, y - 1) == TileType.Grass)
+                                {
+                                    // South Grass
+                                    _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceHorTile);
+                                }
+                                else if (map.GetTile(x, y + 1) == TileType.Grass)
+                                {
+                                    // North Grass
+                                    _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceHorTile);
+                                }
+                                else if (map.GetTile(x + 1, y) == TileType.Grass)
+                                {
+                                    // East Grass
+                                    _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceVerTile);
+                                }
+                                else if (map.GetTile(x - 1, y) == TileType.Grass)
+                                {
+                                    // West Grass
+                                    _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceVerTile);
+                                }
+                                break;
+
+                            case TileType.StartTile:
+                                map.SetTile(x, y, TileType.Grass);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+
+                                Player player = Instantiate(_playerPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                                _players.Add(player);
+                                FollowCamera.Instance.FollowObject = player.transform;
                                 break;
 
                             default:

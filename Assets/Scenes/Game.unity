@@ -180,9 +180,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5d96fd248b54cf146bcce9db85ba4fc8, type: 2}
   - {fileID: 11400000, guid: daf1f16238aa3fa4eb112fe4b9de95e4, type: 2}
   - {fileID: 11400000, guid: a5c5dba93fd62b94eb090d4b7fae6eac, type: 2}
+  _fenceHorTile: {fileID: 11400000, guid: 20f7baa20362539439380453f6695f80, type: 2}
+  _fenceVerTile: {fileID: 11400000, guid: 01f858bb71231d94bab91f8eafdd84fc, type: 2}
   _initialSeed: 0
   _initialLevel: 2
   _initialDifficulty: 2
+  _borderSize: 10
 --- !u!1 &73450756
 GameObject:
   m_ObjectHideFlags: 0

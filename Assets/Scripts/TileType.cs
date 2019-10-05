@@ -10,6 +10,9 @@ namespace zs.Assets.Scripts
     {
         Outside,
         Grass,
-        Fence
+        Fence,
+
+        StartTile,
+        SheepTile
     }
 }
