@@ -60,11 +60,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Difficulty.cs" />
     <Compile Include="Assets\Scripts\Extensions.cs" />
     <Compile Include="Assets\Scripts\FollowCamera.cs" />
+    <Compile Include="Assets\Scripts\Game.cs" />
+    <Compile Include="Assets\Scripts\MainWindow.cs" />
+    <Compile Include="Assets\Scripts\Map.cs" />
+    <Compile Include="Assets\Scripts\MapTile.cs" />
     <Compile Include="Assets\Scripts\PhysicSync.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Sheep.cs" />
+    <Compile Include="Assets\Scripts\TileType.cs" />
     <None Include="Assets\Sheep\Sprites\Right\sprites.txt" />
     <None Include="Assets\Player\Sprites\Left\sprites.txt" />
     <Reference Include="Unity.PackageManagerUI.Editor">
