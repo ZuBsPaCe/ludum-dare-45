@@ -172,10 +172,12 @@ namespace zs.Assets.Scripts
             {
                 if (_lastLeft)
                 {
-                _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
+                    walkLeft = true;
+                    _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
                 }
                 else
                 {
+                    walkRight = true;
                     _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
                 }
             }
@@ -216,7 +218,8 @@ namespace zs.Assets.Scripts
             {
                 if (Time.time - _lastFireTime > 0.5f)
                 {
-                    if (Input.GetButtonDown("Fire1"))
+                    if (Input.GetButtonDown("Fire1") ||
+                        Input.GetKeyDown(KeyCode.Space))
                     {
                         _animator.SetBool("Fire", true);
                         _lastFireTime = Time.time;
