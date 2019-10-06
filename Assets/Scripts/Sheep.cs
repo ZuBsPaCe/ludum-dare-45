@@ -28,9 +28,26 @@ namespace zs.Assets.Scripts
         #endregion Private Vars
 
         #region Public Vars
+
+        public bool IsAlive { get; private set; }
+
         #endregion Public Vars
 
         #region Public Methods
+
+        public void Hit()
+        {
+            if (IsAlive)
+            {
+                IsAlive = false;
+                _rigidbody.velocity = Vector2.zero;
+
+                _animator.SetBool("Dead", true);
+
+                Game.Instance.RegisterDeadSheep(this);
+            }
+        }
+
         #endregion Public Methods
 
         #region MonoBehaviour
@@ -43,6 +60,8 @@ namespace zs.Assets.Scripts
             Debug.Assert(_rigidbody);
             Debug.Assert(_animator);
             Debug.Assert(_spritesRight);
+
+            IsAlive = true;
         }
 
         void Start()
@@ -79,6 +98,11 @@ namespace zs.Assets.Scripts
 	
         void Update()
         {
+            if (!IsAlive)
+            {
+                return;
+            }
+
             Map map = Game.Instance.Map;
 
             Vector2Int currentTile = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
@@ -237,91 +261,6 @@ namespace zs.Assets.Scripts
 
             _rigidbody.velocity = _velocity;
         }
-
-
-
-        //private void OnCollisionEnter2D(Collision2D collision)
-        //{
-        //    Vector2 relativeVelocity = collision.relativeVelocity;
-
-        //    if (_velocity.x > 0)
-        //    {
-        //        if (relativeVelocity.x < 0)
-        //        {
-        //            float rand = Random.value;
-        //            if (rand < 1f / 3f)
-        //            {
-        //                _velocity.x -= 1;
-        //            }
-        //            else if (rand < 2f / 3f)
-        //            {
-        //                _velocity.y -= 1;
-        //            }
-        //            else
-        //            {
-        //                _velocity.y = 1;
-        //            }
-        //        }
-        //    }
-        //    else if (_velocity.x < 0)
-        //    {
-        //        if (relativeVelocity.x > 0)
-        //        {
-        //            float rand = Random.value;
-        //            if (rand < 1f / 3f)
-        //            {
-        //                _velocity.x = 1;
-        //            }
-        //            else if (rand < 2f / 3f)
-        //            {
-        //                _velocity.y -= 1;
-        //            }
-        //            else
-        //            {
-        //                _velocity.y = 1;
-        //            }
-        //        }
-        //    }
-        //    else if (_velocity.y > 0)
-        //    {
-        //        if (relativeVelocity.y < 0)
-        //        {
-        //            float rand = Random.value;
-        //            if (rand < 1f / 3f)
-        //            {
-        //                _velocity.y -= 1;
-        //            }
-        //            else if (rand < 2f / 3f)
-        //            {
-        //                _velocity.x -= 1;
-        //            }
-        //            else
-        //            {
-        //                _velocity.x = 1;
-        //            }
-        //        }
-        //    }
-        //    else if (_velocity.y < 0)
-        //    {
-        //        if (relativeVelocity.y > 0)
-        //        {
-        //            float rand = Random.value;
-        //            if (rand < 1f / 3f)
-        //            {
-        //                _velocity.y = 1;
-        //            }
-        //            else if (rand < 2f / 3f)
-        //            {
-        //                _velocity.x -= 1;
-        //            }
-        //            else
-        //            {
-        //                _velocity.x = 1;
-        //            }
-        //        }
-        //    }
-        //}
-
 
         #endregion MonoBehaviour
 

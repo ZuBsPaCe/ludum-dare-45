@@ -34,7 +34,8 @@ namespace zs.Assets.Scripts
         {
             if (_player != null && collision.tag == "Sheep")
             {
-                Debug.Log("Hit!");
+                Sheep sheep = collision.GetComponent<Sheep>();
+                sheep.Hit();
             }
         }
 

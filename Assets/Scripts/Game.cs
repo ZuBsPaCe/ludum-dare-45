@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.Timeline;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace zs.Assets.Scripts
@@ -42,15 +45,6 @@ namespace zs.Assets.Scripts
         private TileBase _fenceVerTile = null;
 
         [SerializeField]
-        private int _initialSeed = 0;
-
-        [SerializeField]
-        private int _initialLevel = 0;
-
-        [SerializeField]
-        private int _playerCount = 1;
-
-        [SerializeField]
         private int _borderSize = 10;
 
         #endregion Serializable Fields
@@ -61,6 +55,10 @@ namespace zs.Assets.Scripts
         private List<Sheep> _sheep = new List<Sheep>();
         private List<Haystack> _haystacks = new List<Haystack>();
 
+        private Stopwatch _levelTime = new Stopwatch();
+        private bool _levelStarted = false;
+        private bool _levelDone = false;
+
         #endregion Private Vars
 
         #region Public Vars
@@ -69,58 +67,75 @@ namespace zs.Assets.Scripts
 
         public Map Map { get; private set; }
 
+        public int KilledSheep { get; private set; }
+        public int Coins { get; private set; }
+
+        public bool LevelDone
+        {
+            get { return _levelDone; }
+        }
+
+        public int SecondsLeft
+        {
+            get
+            {
+                if (AlivePlayerCount == 0)
+                {
+                    return 0;
+                }
+
+
+                return Mathf.Max(120 - Mathf.FloorToInt((float) _levelTime.Elapsed.TotalSeconds), 0);
+            }
+        }
+
+        public int AlivePlayerCount
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (Player player in _players)
+                {
+                    if (player.IsAlive)
+                    {
+                        count += 1;
+                    }
+                }
+
+                return count;
+            }
+        }
+
         #endregion Public Vars
 
         #region Public Methods
 
-        public void Generate()
+        public void RegisterDeadSheep(Sheep deadSheep)
         {
-            int initialSeed = _initialSeed;
+            Debug.Assert(!deadSheep.IsAlive);
 
-            if (initialSeed == 0)
+            KilledSheep += 1;
+
+            int sheepAlive = 0;
+
+            foreach (Sheep sheep in _sheep)
             {
-                initialSeed = Guid.NewGuid().GetHashCode();
+                if (sheep.IsAlive)
+                {
+                    sheepAlive += 1;
+                }
             }
 
-            Generate(initialSeed, _initialLevel, Master.Instance.CurrentDifficulty);
+            if (sheepAlive == 0)
+            {
+                _levelTime.Stop();
+                _levelDone = true;
+                MainWindow.Instance.RunTimelineLevelWon();
+            }
         }
 
-        #endregion Public Methods
-
-        #region MonoBehaviour
-	
-        void Awake()
-        {
-            Debug.Assert(_playerPrefab);
-            Debug.Assert(_sheepPrefab);
-            Debug.Assert(_haystackPrefab);
-            Debug.Assert(_baseTilemap);
-            Debug.Assert(_wallTilemap);
-
-            Debug.Assert(_outsideTiles != null && _outsideTiles.Length > 0);
-            Debug.Assert(_grassTiles != null && _grassTiles.Length > 0);
-            Debug.Assert(_rockTiles != null && _rockTiles.Length > 0);
-
-            Debug.Assert(_fenceHorTile);
-            Debug.Assert(_fenceVerTile);
-
-            Debug.Log("Game Awake");
-            Instance = this;
-
-            Physics2D.autoSimulation = false;
-        }
-
-        void Update()
-        {
-            float physicStep = Mathf.Min(Time.deltaTime, 1f / 30f);
-            Physics2D.Simulate(physicStep);
-        }
-
-        #endregion MonoBehaviour
-
-        #region Private Methods
-
-        private void Generate(int seed, int level, Difficulty difficulty)
+        public void Generate(int seed, int level, int playerCount, Difficulty difficulty)
         {
             Debug.Log($"Generating: Seed [{seed}], Level [{level}], Difficulty [{difficulty}]");
 
@@ -146,6 +161,11 @@ namespace zs.Assets.Scripts
                 DestroyImmediate(haystack.gameObject);
             }
             _haystacks.Clear();
+
+
+            // Reset Status
+            KilledSheep = 0;
+            Coins = 0;
 
 
             // Reset Tilemaps
@@ -373,11 +393,11 @@ namespace zs.Assets.Scripts
             int maxSpawnY = center.y + 4;
 
             {
-                if (_playerCount <= 1)
+                if (playerCount <= 1)
                 {
                     map.SetTile(center.x, center.y, TileType.StartTile);
                 }
-                else if (_playerCount == 2)
+                else if (playerCount == 2)
                 {
                     map.SetTile(center.x - 2, center.y, TileType.StartTile);
                     map.SetTile(center.x + 2, center.y, TileType.StartTile);
@@ -387,16 +407,16 @@ namespace zs.Assets.Scripts
                     int restPlayers;
                     float radius;
 
-                    if (_playerCount <= 3)
+                    if (playerCount <= 3)
                     {
                         radius = 1;
-                        restPlayers = _playerCount;
+                        restPlayers = playerCount;
                     }
                     else
                     {
                         map.SetTile(center.x, center.y, TileType.StartTile);
                         radius = 2;
-                        restPlayers = _playerCount - 1;
+                        restPlayers = playerCount - 1;
                     }
 
                     float angle = 360f / restPlayers;
@@ -758,7 +778,57 @@ namespace zs.Assets.Scripts
 
                 FollowCamera.Instance.FollowObjects = playerTransforms.ToArray();
             }
+
+            _levelTime.Restart();
+            _levelStarted = true;
         }
+
+        #endregion Public Methods
+
+        #region MonoBehaviour
+	
+        void Awake()
+        {
+            Debug.Assert(_playerPrefab);
+            Debug.Assert(_sheepPrefab);
+            Debug.Assert(_haystackPrefab);
+            Debug.Assert(_baseTilemap);
+            Debug.Assert(_wallTilemap);
+
+            Debug.Assert(_outsideTiles != null && _outsideTiles.Length > 0);
+            Debug.Assert(_grassTiles != null && _grassTiles.Length > 0);
+            Debug.Assert(_rockTiles != null && _rockTiles.Length > 0);
+
+            Debug.Assert(_fenceHorTile);
+            Debug.Assert(_fenceVerTile);
+
+            Debug.Log("Game Awake");
+            Instance = this;
+
+            Physics2D.autoSimulation = false;
+        }
+
+        void Update()
+        {
+            float physicStep = Mathf.Min(Time.deltaTime, 1f / 30f);
+            Physics2D.Simulate(physicStep);
+
+            if (_levelStarted && !_levelDone)
+            {
+#if UNITY_STANDALONE
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Master.Instance.SetSceneType(SceneType.StartScreen);
+                }
+#endif
+
+            }
+        }
+
+        #endregion MonoBehaviour
+
+        #region Private Methods
 
         private void PlaceTileSquare(Map map, int startX, int startY, int width, int height, TileType tileType)
         {

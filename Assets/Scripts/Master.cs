@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.SceneManagement;
 using zs.Assets.Scripts;
 
@@ -12,10 +13,17 @@ namespace zs.Assets
 
         [SerializeField]
         private SceneType _initialSceneType = SceneType.StartScreen;
-        
-        [SerializeField]
-        private Difficulty _initialDifficulty = Difficulty.Normal;
 
+        [SerializeField]
+        private int _initialSeed = 0;
+
+        [SerializeField]
+        private int _initialLevel = 0;
+
+        [SerializeField]
+        private int _initialPlayerCount = 0;
+
+        
         #endregion Serializable Fields
 
         #region Private Vars
@@ -41,6 +49,11 @@ namespace zs.Assets
             }
         }
 
+        public int CurrentLevel { get; private set; }
+        public int CurrentPlayerCount { get; private set; }
+
+        public int TotalScore { get; set; }
+
         #endregion Public Vars
 
         #region Public Methods
@@ -53,6 +66,22 @@ namespace zs.Assets
             }
 
             _currentSceneType = sceneType;
+
+            SceneManager.LoadScene("MainScene");
+        }
+
+        public void StartNewGame()
+        {
+            TotalScore = 0;
+            CurrentPlayerCount = _initialPlayerCount;
+            CurrentLevel = _initialLevel;
+
+            SetSceneType(SceneType.Game);
+        }
+
+        public void StartNextLevel()
+        {
+            CurrentLevel += 1;
 
             SceneManager.LoadScene("MainScene");
         }
@@ -101,10 +130,6 @@ namespace zs.Assets
                 {
                     Application.Quit();
                 }
-                else if (_currentSceneType == SceneType.Game)
-                {
-                    SetSceneType(SceneType.StartScreen);
-                }
             }
             else if (Input.GetKeyUp(KeyCode.Escape))
             {
@@ -127,7 +152,14 @@ namespace zs.Assets
                     break;
 
                 case SceneType.Game:
-                    Game.Instance.Generate();
+                    int initialSeed = _initialSeed;
+
+                    if (initialSeed == 0)
+                    {
+                        initialSeed = Guid.NewGuid().GetHashCode();
+                    }
+
+                    Game.Instance.Generate(initialSeed, CurrentLevel, CurrentPlayerCount, CurrentDifficulty);
                     break;
 
                 default:

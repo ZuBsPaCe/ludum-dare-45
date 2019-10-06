@@ -35,6 +35,8 @@ namespace zs.Assets.Scripts
 
         public bool HasPitchfork { get; private set; }
 
+        public bool IsAlive { get; private set; }
+
         #endregion Public Vars
 
         #region Public Methods
@@ -66,6 +68,8 @@ namespace zs.Assets.Scripts
             Debug.Assert(_spritesLeft);
 
             Debug.Assert(_pitchforkLeft);
+
+            IsAlive = true;
         }
 
         void Start()
@@ -74,6 +78,12 @@ namespace zs.Assets.Scripts
 	
         void Update()
         {
+            if (Game.Instance.LevelDone)
+            {
+                _rigidbody.velocity = Vector2.zero;
+                return;
+            }
+
             Vector2 velocity = Vector2.zero;
 
             float horAxis = Input.GetAxisRaw("Horizontal");

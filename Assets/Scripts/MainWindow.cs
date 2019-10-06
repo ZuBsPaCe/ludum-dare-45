@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 namespace zs.Assets.Scripts
@@ -19,9 +20,27 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private Button _generateButton = null;
 
+        [SerializeField]
+        private RectTransform _levelEndStatusYou = null;
+
+        [SerializeField]
+        private RectTransform _levelEndStatusWonSuccess = null;
+
+        [SerializeField]
+        private RectTransform _levelEndStatusSheep = null;
+
+        [SerializeField]
+        private RectTransform _levelEndStatusWonFailed = null;
+
+        [SerializeField]
+        private PlayableAsset _timelineLevelWon = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
+
+        private PlayableDirector _playableDirector;
+
         #endregion Private Vars
 
         #region Public Vars
@@ -67,7 +86,13 @@ namespace zs.Assets.Scripts
 
         public void Generate()
         {
-            Game.Instance.Generate();
+            Master.Instance.StartNewGame();
+        }
+
+        public void RunTimelineLevelWon()
+        {
+            _playableDirector.playableAsset = _timelineLevelWon;
+            _playableDirector.Play();
         }
 
         #endregion Public Methods
@@ -82,6 +107,16 @@ namespace zs.Assets.Scripts
             Debug.Assert(_difficultyButtonText);
             Debug.Assert(_exitButton);
             Debug.Assert(_generateButton);
+
+            Debug.Assert(_levelEndStatusYou);
+            Debug.Assert(_levelEndStatusWonSuccess);
+            Debug.Assert(_levelEndStatusSheep);
+            Debug.Assert(_levelEndStatusWonFailed);
+
+            _playableDirector = GetComponent<PlayableDirector>();
+            Debug.Assert(_playableDirector);
+
+            Debug.Assert(_timelineLevelWon);
         }
 
         void Start()
