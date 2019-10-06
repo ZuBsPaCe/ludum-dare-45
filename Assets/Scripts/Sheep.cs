@@ -292,12 +292,22 @@ namespace zs.Assets.Scripts
             bool walkRight = false;
 
 
-            if (_velocity.x > 0 || _velocity.y > 0)
+            if (_velocity.x > 0)
             {
                 walkRight = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(1);
             }
-            else if (_velocity.x < 0 || _velocity.y < 0)
+            else if (_velocity.x < 0)
+            {
+                walkLeft = true;
+                _spritesRight.localScale = _spritesRight.localScale.with_x(-1);
+            }
+            else if (_velocity.y > 0)
+            {
+                walkRight = true;
+                _spritesRight.localScale = _spritesRight.localScale.with_x(1);
+            }
+            else if (_velocity.y < 0)
             {
                 walkLeft = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(-1);

@@ -100,6 +100,9 @@ namespace zs.Assets.Scripts
         {
             if (Game.Instance.LevelDone)
             {
+                _animator.SetBool("WalkRight", false);
+                _animator.SetBool("WalkLeft", false);
+                _animator.SetBool("Fire", false);
                 _rigidbody.velocity = Vector2.zero;
                 return;
             }
@@ -139,6 +142,16 @@ namespace zs.Assets.Scripts
                 _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
             }
             else if (velocity.x < 0)
+            {
+                walkLeft = true;
+                _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
+            }
+            else if (velocity.y > 0)
+            {
+                walkRight = true;
+                _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
+            }
+            else if (velocity.y < 0)
             {
                 walkLeft = true;
                 _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
