@@ -74,14 +74,32 @@ namespace zs.Assets.Scripts
             }
             else if (_followObjects != null && _followObjects.Length > 0)
             {
+                int followCount = 0;
                 Vector3 center = Vector3.zero;
                 foreach (Transform followObject in _followObjects)
                 {
-                    center += followObject.position;
+                    Player player = followObject.GetComponent<Player>();
+
+                    if (player != null)
+                    {
+                        if (player.IsAlive)
+                        {
+                            center += followObject.position;
+                            followCount += 1;
+                        }
+                    }
+                    else
+                    {
+                        center += followObject.position;
+                        followCount += 1;
+                    }
                 }
 
-                center /= _followObjects.Length;
-                transform.position = center.with_z(transform.position.z);
+                if (followCount > 0)
+                {
+                    center /= followCount;
+                    transform.position = center.with_z(transform.position.z);
+                }
             }
         }
 
