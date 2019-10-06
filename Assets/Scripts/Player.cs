@@ -22,6 +22,7 @@ namespace zs.Assets.Scripts
         #region Private Vars
 
         private Rigidbody2D _rigidbody = null;
+        private CircleCollider2D _collider = null;
         private Animator _animator = null;
 
         private bool _walkLeft = false;
@@ -54,6 +55,23 @@ namespace zs.Assets.Scripts
             _pitchforkLeft.gameObject.SetActive(true);
         }
 
+        public void Hit()
+        {
+            if (IsAlive)
+            {
+                IsAlive = false;
+
+                _rigidbody.velocity = Vector2.zero;
+                _rigidbody.simulated = false;
+
+                _collider.enabled = false;
+
+                _animator.SetBool("Dead", true);
+
+                Game.Instance.RegisterDeadPlayer(this);
+            }
+        }
+
         #endregion Public Methods
 
         #region MonoBehaviour
@@ -61,9 +79,11 @@ namespace zs.Assets.Scripts
         void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            _collider = GetComponent<CircleCollider2D>();
             _animator = GetComponent<Animator>();
 
             Debug.Assert(_rigidbody);
+            Debug.Assert(_collider);
             Debug.Assert(_animator);
             Debug.Assert(_spritesLeft);
 

@@ -262,6 +262,15 @@ namespace zs.Assets.Scripts
             _rigidbody.velocity = _velocity;
         }
 
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (IsAlive && collision.collider.tag == "Player")
+            {
+                Player player = collision.collider.GetComponent<Player>();
+                player.Hit();
+            }
+        }
+
         #endregion MonoBehaviour
 
         #region Private Methods

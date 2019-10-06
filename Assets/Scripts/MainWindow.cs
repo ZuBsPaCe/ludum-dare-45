@@ -35,6 +35,9 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private PlayableAsset _timelineLevelWon = null;
 
+        [SerializeField]
+        private PlayableAsset _timelineLevelFailed = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
@@ -92,6 +95,12 @@ namespace zs.Assets.Scripts
         public void RunTimelineLevelWon()
         {
             _playableDirector.playableAsset = _timelineLevelWon;
+            _playableDirector.Play();
+        }
+
+        public void RunTimelineLevelFailed()
+        {
+            _playableDirector.playableAsset = _timelineLevelFailed;
             _playableDirector.Play();
         }
 

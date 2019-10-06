@@ -135,6 +135,28 @@ namespace zs.Assets.Scripts
             }
         }
 
+        public void RegisterDeadPlayer(Player deadPlayer)
+        {
+            Debug.Assert(!deadPlayer.IsAlive);
+
+            int playersAlive = 0;
+
+            foreach (Player player in _players)
+            {
+                if (player.IsAlive)
+                {
+                    playersAlive += 1;
+                }
+            }
+
+            if (playersAlive == 0)
+            {
+                _levelTime.Stop();
+                _levelDone = true;
+                MainWindow.Instance.RunTimelineLevelFailed();
+            }
+        }
+
         public void Generate(int seed, int level, int playerCount, Difficulty difficulty)
         {
             Debug.Log($"Generating: Seed [{seed}], Level [{level}], Difficulty [{difficulty}]");

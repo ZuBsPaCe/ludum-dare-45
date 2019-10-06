@@ -279,6 +279,8 @@ MonoBehaviour:
   _levelEndStatusSheep: {fileID: 2040619970}
   _levelEndStatusWonFailed: {fileID: 1987677888}
   _timelineLevelWon: {fileID: 11400000, guid: 0453ad8e1027e77479fbbb6de470a1a4, type: 2}
+  _timelineLevelFailed: {fileID: 11400000, guid: 439518e9b6d114845940dcfc9ec87389,
+    type: 2}
 --- !u!114 &73450758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,7 +393,7 @@ PlayableDirector:
   m_GameObject: {fileID: 73450756}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 0453ad8e1027e77479fbbb6de470a1a4, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -406,6 +408,16 @@ PlayableDirector:
   - key: {fileID: 114699386533153730, guid: 0453ad8e1027e77479fbbb6de470a1a4, type: 2}
     value: {fileID: 2118119603}
   - key: {fileID: 114296144964508690, guid: 0453ad8e1027e77479fbbb6de470a1a4, type: 2}
+    value: {fileID: 1121279632}
+  - key: {fileID: 114308067109677888, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
+    value: {fileID: 2040619969}
+  - key: {fileID: 114456705689937014, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
+    value: {fileID: 1987677887}
+  - key: {fileID: 114035300230829408, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
+    value: {fileID: 73450762}
+  - key: {fileID: 114699386533153730, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
+    value: {fileID: 2118119603}
+  - key: {fileID: 114296144964508690, guid: 439518e9b6d114845940dcfc9ec87389, type: 2}
     value: {fileID: 1121279632}
   m_ExposedReferences:
     m_References: []

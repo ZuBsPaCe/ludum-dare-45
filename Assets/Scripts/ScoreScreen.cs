@@ -184,26 +184,27 @@ namespace zs.Assets.Scripts
             else if (_sequence == 6)
             {
                 bool notFinished = false;
+                int multiplier = Mathf.Max(1, _displayedMultiplier);
 
                 if (_displayedSheep > 0)
                 {
                     _displayedSheep -= 1;
                     notFinished = true;
-                    Master.Instance.TotalScore += _displayedMultiplier;
+                    Master.Instance.TotalScore += multiplier;
                 }
 
                 if (_displayedCoins > 0)
                 {
                     _displayedCoins -= 1;
                     notFinished = true;
-                    Master.Instance.TotalScore += _displayedMultiplier;
+                    Master.Instance.TotalScore += multiplier;
                 }
 
                 if (_displayedTime > 0)
                 {
                     _displayedTime -= 1;
                     notFinished = true;
-                    Master.Instance.TotalScore += _displayedMultiplier;
+                    Master.Instance.TotalScore += multiplier;
                 }
 
                 if (notFinished)
