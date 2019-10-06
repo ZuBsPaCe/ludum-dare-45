@@ -51,6 +51,7 @@ namespace zs.Assets
 
         public int CurrentLevel { get; private set; }
         public int CurrentPlayerCount { get; private set; }
+        public int CurrentPitchForkCount { get; private set; }
 
         public int TotalScore { get; set; }
 
@@ -75,6 +76,7 @@ namespace zs.Assets
             TotalScore = 0;
             CurrentPlayerCount = _initialPlayerCount;
             CurrentLevel = _initialLevel;
+            CurrentPitchForkCount = 0;
 
             SetSceneType(SceneType.Game);
         }
@@ -82,6 +84,16 @@ namespace zs.Assets
         public void StartNextLevel()
         {
             CurrentLevel += 1;
+            Master.Instance.CurrentPlayerCount = Game.Instance.AlivePlayerCount + 1;
+
+            CurrentPitchForkCount = 0;
+            foreach (Player player in Game.Instance.Players)
+            {
+                if (player.IsAlive && player.HasPitchfork)
+                {
+                    CurrentPitchForkCount += 1;
+                }
+            }
 
             SceneManager.LoadScene("MainScene");
         }

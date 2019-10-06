@@ -875,6 +875,8 @@ namespace zs.Assets.Scripts
 
             Map = map;
 
+            int remainingPitchForks = Master.Instance.CurrentPitchForkCount;
+
             // Generate Real TileMap
             {
                 List<Transform> playerTransforms = new List<Transform>();
@@ -964,6 +966,12 @@ namespace zs.Assets.Scripts
                                 Player player = Instantiate(_playerPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
                                 _players.Add(player);
                                 playerTransforms.Add(player.transform);
+
+                                if (remainingPitchForks > 0)
+                                {
+                                    player.PickupPitchfork();
+                                    remainingPitchForks -= 1;
+                                }
 
                                 break;
 

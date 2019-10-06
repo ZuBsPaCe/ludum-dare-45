@@ -34,6 +34,8 @@ namespace zs.Assets.Scripts
         private float _lastFireTime = 0;
         private bool _spawnWoosh = false;
 
+        private bool _lastLeft = true;
+
         #endregion Private Vars
 
         #region Public Vars
@@ -112,6 +114,11 @@ namespace zs.Assets.Scripts
                 return;
             }
 
+            if (!IsAlive)
+            {
+                return;
+            }
+
             Vector2 velocity = Vector2.zero;
 
             float horAxis = Input.GetAxisRaw("Horizontal");
@@ -145,21 +152,24 @@ namespace zs.Assets.Scripts
             {
                 walkRight = true;
                 _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
+                _lastLeft = false;
             }
             else if (velocity.x < 0)
             {
                 walkLeft = true;
                 _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
+                _lastLeft = true;;
             }
-            else if (velocity.y > 0)
+            else if (velocity.y > 0 || velocity.y < 0)
             {
-                walkRight = true;
-                _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
-            }
-            else if (velocity.y < 0)
-            {
-                walkLeft = true;
+                if (_lastLeft)
+                {
                 _spritesLeft.localScale = _spritesLeft.localScale.with_x(1);
+                }
+                else
+                {
+                    _spritesLeft.localScale = _spritesLeft.localScale.with_x(-1);
+                }
             }
 
             if (_walkRight != walkRight)
