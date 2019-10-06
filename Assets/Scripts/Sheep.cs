@@ -33,6 +33,8 @@ namespace zs.Assets.Scripts
         private float _startEatTime = 0;
         private bool _startedEatingAnimation = false;
 
+        private AudioSource _audioSource = null;
+
         #endregion Private Vars
 
         #region Public Vars
@@ -45,6 +47,11 @@ namespace zs.Assets.Scripts
         }
 
         public const float HearingDistance = 6f;
+
+        public AudioSource AudioSource
+        {
+            get { return _audioSource; }
+        }
 
         #endregion Public Vars
 
@@ -112,11 +119,13 @@ namespace zs.Assets.Scripts
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
+            _audioSource = GetComponent<AudioSource>();
 
             Debug.Assert(_rigidbody);
             Debug.Assert(_animator);
             Debug.Assert(_spritesRight);
             Debug.Assert(_sheepGrass);
+            Debug.Assert(_audioSource);
 
             IsAlive = true;
 

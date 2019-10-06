@@ -157,6 +157,8 @@ namespace zs.Assets.Scripts
 
             KilledSheep += 1;
 
+            SoundPlayer.Instance.Play(Sound.SheepHit, deadSheep.AudioSource);
+
             if (Master.Instance.CurrentDifficulty == Difficulty.Easy)
             {
                 WakeUpSheep(fromPlayer);
@@ -192,6 +194,8 @@ namespace zs.Assets.Scripts
         {
             Debug.Assert(!deadPlayer.IsAlive);
 
+            SoundPlayer.Instance.Play(Sound.PlayerHit, deadPlayer.AudioSource);
+
             int playersAlive = 0;
 
             foreach (Player player in _players)
@@ -210,12 +214,14 @@ namespace zs.Assets.Scripts
             }
         }
 
-        public void RegisterCoinPickup(Coin coin)
+        public void RegisterCoinPickup(Coin coin, Player player)
         {
             if (_levelDone)
             {
                 return;
             }
+
+            SoundPlayer.Instance.Play(Sound.Bling, player.AudioSource);
 
             Destroy(coin.gameObject);
             Coins += 1;

@@ -23,7 +23,10 @@ namespace zs.Assets
         [SerializeField]
         private int _initialPlayerCount = 0;
 
-        
+
+        [SerializeField]
+        private AudioSource _titleMusic = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
@@ -55,12 +58,43 @@ namespace zs.Assets
 
         public int TotalScore { get; set; }
 
+
         #endregion Public Vars
 
         #region Public Methods
 
+        public void ToggleMusic()
+        {
+            int currentMusic = PlayerPrefs.GetInt("Music", 1);
+
+            if (currentMusic == 0)
+            {
+                currentMusic = 1;
+                _titleMusic.Play();
+            }
+            else
+            {
+                currentMusic = 0;
+                _titleMusic.Stop();
+            }
+
+            PlayerPrefs.SetInt("Music", currentMusic);
+            PlayerPrefs.Save();
+        }
+
         public void SetSceneType(SceneType sceneType)
         {
+            int currentMusic = PlayerPrefs.GetInt("Music", 1);
+
+            if (currentMusic == 1)
+            {
+                _titleMusic.Play();
+            }
+            else
+            {
+                _titleMusic.Stop();
+            }
+
             if (_currentSceneType == sceneType)
             {
                 return;

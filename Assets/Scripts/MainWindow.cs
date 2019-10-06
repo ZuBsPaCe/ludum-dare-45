@@ -58,6 +58,11 @@ namespace zs.Assets.Scripts
 
         #region Public Methods
 
+        public void ToggleMusic()
+        {
+            Master.Instance.ToggleMusic();
+        }
+
         public void SetStartScreenActive(bool active)
         {
             _startScreen.gameObject.SetActive(active);
@@ -82,16 +87,20 @@ namespace zs.Assets.Scripts
 
         public void StartGame()
         {
+            SoundPlayer.Instance.Play(Sound.Click);
             Master.Instance.StartNewGame();
         }
 
         public void ExitGame()
         {
+            SoundPlayer.Instance.Play(Sound.Click);
             Application.Quit();
         }
 
         public void CycleDifficulty()
         {
+            SoundPlayer.Instance.Play(Sound.Click);
+
             if (Master.Instance.CurrentDifficulty == Difficulty.Easy)
             {
                 Master.Instance.CurrentDifficulty = Difficulty.Normal;

@@ -27,6 +27,7 @@ namespace zs.Assets.Scripts
         private Rigidbody2D _rigidbody = null;
         private CircleCollider2D _collider = null;
         private Animator _animator = null;
+        private AudioSource _audioSource = null;
 
         private bool _walkLeft = false;
         private bool _walkRight = false;
@@ -43,6 +44,11 @@ namespace zs.Assets.Scripts
         public bool HasPitchfork { get; private set; }
 
         public bool IsAlive { get; private set; }
+
+        public AudioSource AudioSource
+        {
+            get { return _audioSource; }
+        }
 
         #endregion Public Vars
 
@@ -87,12 +93,14 @@ namespace zs.Assets.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
             _collider = GetComponent<CircleCollider2D>();
             _animator = GetComponent<Animator>();
+            _audioSource = GetComponent<AudioSource>();
 
             Debug.Assert(_rigidbody);
             Debug.Assert(_collider);
             Debug.Assert(_animator);
             Debug.Assert(_spritesLeft);
             Debug.Assert(_wooshPrefab);
+            Debug.Assert(_audioSource);
 
             Debug.Assert(_pitchforkLeft);
 
@@ -213,6 +221,8 @@ namespace zs.Assets.Scripts
                         _animator.SetBool("Fire", true);
                         _lastFireTime = Time.time;
                         _spawnWoosh = true;
+
+                        SoundPlayer.Instance.Play(Sound.PlayerFire, _audioSource);
 
                         if (Master.Instance.CurrentDifficulty == Difficulty.Normal)
                         {

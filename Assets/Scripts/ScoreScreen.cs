@@ -123,6 +123,7 @@ namespace zs.Assets.Scripts
             {
                 _totalLabel.gameObject.SetActive(true);
                 _totalCounter.gameObject.SetActive(true);
+                SoundPlayer.Instance.Play(Sound.ScoreBam);
 
                 _waitUntilTime = Time.time + 1f;
                 _sequence += 1;
@@ -131,6 +132,7 @@ namespace zs.Assets.Scripts
             {
                 _sheepLabel.gameObject.SetActive(true);
                 _sheepCounter.gameObject.SetActive(true);
+                SoundPlayer.Instance.Play(Sound.ScoreBam);
 
                 _waitUntilTime = Time.time + 0.3f;
                 _sequence += 1;
@@ -139,6 +141,7 @@ namespace zs.Assets.Scripts
             {
                 _coinsLabel.gameObject.SetActive(true);
                 _coinsCounter.gameObject.SetActive(true);
+                SoundPlayer.Instance.Play(Sound.ScoreBam);
 
                 _waitUntilTime = Time.time + 0.3f;
                 _sequence += 1;
@@ -147,6 +150,7 @@ namespace zs.Assets.Scripts
             {
                 _timeLabel.gameObject.SetActive(true);
                 _timeCounter.gameObject.SetActive(true);
+                SoundPlayer.Instance.Play(Sound.ScoreBam);
 
                 _waitUntilTime = Time.time + 0.3f;
                 _sequence += 1;
@@ -155,6 +159,7 @@ namespace zs.Assets.Scripts
             {
                 _peasantLabel.gameObject.SetActive(true);
                 _peasantCounter.gameObject.SetActive(true);
+                SoundPlayer.Instance.Play(Sound.ScoreBam);
 
                 _waitUntilTime = Time.time + 1.5f;
                 _sequence += 1;
@@ -168,6 +173,8 @@ namespace zs.Assets.Scripts
             {
                 _displayedPeasants -= 1;
                 _displayedMultiplier += 1;
+
+                SoundPlayer.Instance.Play(Sound.Bling);
 
                 UpdateCounters();
 
@@ -209,6 +216,7 @@ namespace zs.Assets.Scripts
 
                 if (notFinished)
                 {
+                    SoundPlayer.Instance.Play(Sound.Bling);
                     UpdateCounters();
                     _waitUntilTime = Time.time + 0.05f;
                 }
@@ -227,6 +235,8 @@ namespace zs.Assets.Scripts
             {
                 if (SkipPressed())
                 {
+                    SoundPlayer.Instance.Play(Sound.Click);
+
                     if (Game.Instance.AlivePlayerCount > 0)
                     {
                         Master.Instance.StartNextLevel();

@@ -5,7 +5,7 @@ public class Woosh : MonoBehaviour
 	#region Serializable Fields
 
     [SerializeField]
-    private SpriteRenderer _spriteRenderer;
+    private SpriteRenderer _spriteRenderer = null;
 
 	#endregion Serializable Fields
 

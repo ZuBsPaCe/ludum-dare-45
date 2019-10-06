@@ -76,8 +76,10 @@
     <Compile Include="Assets\Scripts\SceneType.cs" />
     <Compile Include="Assets\Scripts\ScoreScreen.cs" />
     <Compile Include="Assets\Scripts\Sheep.cs" />
+    <Compile Include="Assets\Scripts\Sound.cs" />
+    <Compile Include="Assets\Scripts\SoundPlayer.cs" />
     <Compile Include="Assets\Scripts\TileType.cs" />
-    <Compile Include="Assets\Woosh.cs" />
+    <Compile Include="Assets\Scripts\Woosh.cs" />
     <None Include="Assets\Sheep\Sprites\Right\sprites.txt" />
     <None Include="Assets\Player\Sprites\Left\sprites.txt" />
     <None Include="Assets\Font\upirjump.txt" />

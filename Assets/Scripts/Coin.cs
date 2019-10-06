@@ -80,7 +80,7 @@ namespace zs.Assets
                 Player player = collision.collider.GetComponent<Player>();
                 if (player.IsAlive)
                 {
-                    Game.Instance.RegisterCoinPickup(this);
+                    Game.Instance.RegisterCoinPickup(this, player);
                 }
             }
 
