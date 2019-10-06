@@ -39,10 +39,28 @@ namespace zs.Assets.Scripts
         private TileBase[] _rockTiles = null;
 
         [SerializeField]
-        private TileBase _fenceHorTile = null;
+        private TileBase _fenceN = null;
 
         [SerializeField]
-        private TileBase _fenceVerTile = null;
+        private TileBase _fenceNW = null;
+
+        [SerializeField]
+        private TileBase _fenceW = null;
+
+        [SerializeField]
+        private TileBase _fenceSW = null;
+
+        [SerializeField]
+        private TileBase _fenceS = null;
+
+        [SerializeField]
+        private TileBase _fenceSE = null;
+
+        [SerializeField]
+        private TileBase _fenceE = null;
+
+        [SerializeField]
+        private TileBase _fenceNE = null;
 
         [SerializeField]
         private int _borderSize = 10;
@@ -558,33 +576,126 @@ namespace zs.Assets.Scripts
                     {
                         if (map.GetTile(x, y) == TileType.Outside)
                         {
+                            bool grassN = false;
+                            bool grassNE = false;
+                            bool grassE = false;
+                            bool grassSE = false;
+                            bool grassS = false;
+                            bool grassSW = false;
+                            bool grassW = false;
+                            bool grassNW = false;
+
+                            if (map.IsValid(x, y + 1) &&
+                                 map.GetTile(x, y + 1) != TileType.Outside)
+                            {
+                                // North Grass
+                                grassN = true;
+                                nearFencePositions.Add(new Vector2Int(x, y + 1));
+                            }
+
+                            if (map.IsValid(x + 1, y + 1) &&
+                                 map.GetTile(x + 1, y + 1) != TileType.Outside)
+                            {
+                                // NorthEast Grass
+                                grassNE = true;
+                                nearFencePositions.Add(new Vector2Int(x + 1, y + 1));
+                            }
+
+                            if (map.IsValid(x + 1, y) &&
+                                 map.GetTile(x + 1, y) != TileType.Outside)
+                            {
+                                // East Grass
+                                grassE = true;
+                                nearFencePositions.Add(new Vector2Int(x + 1, y));
+                            }
+
+                            if (map.IsValid(x + 1, y - 1) &&
+                                 map.GetTile(x + 1, y - 1) != TileType.Outside)
+                            {
+                                // SouthEast Grass
+                                grassSE = true;
+                                nearFencePositions.Add(new Vector2Int(x + 1, y - 1));
+                            }
+
                             if (map.IsValid(x, y - 1) &&
                                 map.GetTile(x, y - 1) != TileType.Outside)
                             {
                                 // South Grass
-                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceN));
+                                grassS = true;
                                 nearFencePositions.Add(new Vector2Int(x, y - 1));
                             }
-                            else if (map.IsValid(x, y + 1) &&
-                                     map.GetTile(x, y + 1) != TileType.Outside)
+
+                            if (map.IsValid(x - 1, y - 1) &&
+                                map.GetTile(x - 1, y - 1) != TileType.Outside)
                             {
-                                // North Grass
-                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceS));
-                                nearFencePositions.Add(new Vector2Int(x, y + 1));
+                                // SouthWest Grass
+                                grassSW = true;
+                                nearFencePositions.Add(new Vector2Int(x - 1, y - 1));
                             }
-                            else if (map.IsValid(x + 1, y) &&
-                                     map.GetTile(x + 1, y) != TileType.Outside)
-                            {
-                                // East Grass
-                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceW));
-                                nearFencePositions.Add(new Vector2Int(x + 1, y));
-                            }
-                            else if (map.IsValid(x - 1, y) &&
-                                     map.GetTile(x - 1, y) != TileType.Outside)
+
+                            if (map.IsValid(x - 1, y) &&
+                                map.GetTile(x - 1, y) != TileType.Outside)
                             {
                                 // West Grass
-                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceE));
+                                grassW = true;
                                 nearFencePositions.Add(new Vector2Int(x - 1, y));
+                            }
+
+                            if (map.IsValid(x - 1, y + 1) &&
+                                map.GetTile(x - 1, y + 1) != TileType.Outside)
+                            {
+                                // NorthWest Grass
+                                grassNW = true;
+                                nearFencePositions.Add(new Vector2Int(x - 1, y + 1));
+                            }
+
+                            if (grassN && grassE)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceNE));
+                            }
+                            else if (grassE && grassS)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceSE));
+                            }
+                            else if (grassS && grassW)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceSW));
+                            }
+                            else if (grassW && grassN)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceNW));
+                            }
+                            else if (grassN)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceS));
+                            }
+                            else if (grassE)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceW));
+                            }
+                            else if (grassS)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceN));
+                            }
+                            else if (grassW)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceE));
+                            }
+                            else if (grassNE)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceSW));
+                            }
+                            else if (grassSE)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceNW));
+                            }
+                            else if (grassSW)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceNE));
+                            }
+                            else if (grassNW)
+                            {
+                                fencePositions.Add(Tuple.Create(new Vector2Int(x, y), TileType.FenceSE));
                             }
                         }
                     }
@@ -739,21 +850,51 @@ namespace zs.Assets.Scripts
                                 break;
 
                             case TileType.FenceN:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceN);
+                                break;
+
                             case TileType.FenceNE:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceNE);
+                                break;
+
                             case TileType.FenceNW:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceNW);
+                                break;
+
                             case TileType.FenceS:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceS);
+                                break;
+
                             case TileType.FenceSE:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceSE);
+                                break;
+
                             case TileType.FenceSW:
                                 map.SetTile(x, y, TileType.Blocked);
                                 _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
-                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceHorTile);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceSW);
                                 break;
 
                             case TileType.FenceE:
+                                map.SetTile(x, y, TileType.Blocked);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceE);
+                                break;
+
                             case TileType.FenceW:
                                 map.SetTile(x, y, TileType.Blocked);
                                 _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
-                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceVerTile);
+                                _wallTilemap.SetTile(new Vector3Int(x, y, 0), _fenceW);
                                 break;
                                
                             case TileType.Rock:
@@ -821,8 +962,14 @@ namespace zs.Assets.Scripts
             Debug.Assert(_grassTiles != null && _grassTiles.Length > 0);
             Debug.Assert(_rockTiles != null && _rockTiles.Length > 0);
 
-            Debug.Assert(_fenceHorTile);
-            Debug.Assert(_fenceVerTile);
+            Debug.Assert(_fenceN);
+            Debug.Assert(_fenceNE);
+            Debug.Assert(_fenceE);
+            Debug.Assert(_fenceSE);
+            Debug.Assert(_fenceS);
+            Debug.Assert(_fenceSW);
+            Debug.Assert(_fenceW);
+            Debug.Assert(_fenceNW);
 
             Debug.Log("Game Awake");
             Instance = this;

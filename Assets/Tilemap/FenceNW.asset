@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Fence Ver Left
+  m_Name: FenceNW
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 57be87f84013a5c4998a518f12ca3091, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0218e700a2eefc646bd459cdce40182c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

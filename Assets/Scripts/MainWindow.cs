@@ -61,7 +61,7 @@ namespace zs.Assets.Scripts
 
         public void StartGame()
         {
-            Master.Instance.SetSceneType(SceneType.Game);
+            Master.Instance.StartNewGame();
         }
 
         public void ExitGame()
