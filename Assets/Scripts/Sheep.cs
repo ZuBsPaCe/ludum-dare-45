@@ -35,7 +35,7 @@ namespace zs.Assets.Scripts
 
         #region Public Methods
 
-        public void Hit()
+        public void Hit(Player player)
         {
             if (IsAlive)
             {
@@ -44,7 +44,7 @@ namespace zs.Assets.Scripts
 
                 _animator.SetBool("Dead", true);
 
-                Game.Instance.RegisterDeadSheep(this);
+                Game.Instance.RegisterDeadSheep(this, player);
             }
         }
 

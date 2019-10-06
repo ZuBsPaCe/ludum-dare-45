@@ -63,6 +63,9 @@ namespace zs.Assets.Scripts
         private TileBase _fenceNE = null;
 
         [SerializeField]
+        private Coin _coinPrefab = null;
+
+        [SerializeField]
         private int _borderSize = 10;
 
         #endregion Serializable Fields
@@ -129,11 +132,12 @@ namespace zs.Assets.Scripts
 
         #region Public Methods
 
-        public void RegisterDeadSheep(Sheep deadSheep)
+        public void RegisterDeadSheep(Sheep deadSheep, Player fromPlayer)
         {
             Debug.Assert(!deadSheep.IsAlive);
 
             KilledSheep += 1;
+
 
             int sheepAlive = 0;
 
@@ -143,6 +147,14 @@ namespace zs.Assets.Scripts
                 {
                     sheepAlive += 1;
                 }
+            }
+
+            if (sheepAlive > 0)
+            {
+                Coin coin = Instantiate(_coinPrefab, deadSheep.transform.position, Quaternion.identity);
+                Vector2 coinVec = (coin.transform.position - fromPlayer.transform.position).normalized;
+
+                coin.Rigidbody.AddForce(coinVec * Random.Range(3f, 10f), ForceMode2D.Impulse);
             }
 
             if (sheepAlive == 0)
@@ -173,6 +185,17 @@ namespace zs.Assets.Scripts
                 _levelDone = true;
                 MainWindow.Instance.RunTimelineLevelFailed();
             }
+        }
+
+        public void RegisterCoinPickup(Coin coin)
+        {
+            if (_levelDone)
+            {
+                return;
+            }
+
+            Destroy(coin.gameObject);
+            Coins += 1;
         }
 
         public void Generate(int seed, int level, int playerCount, Difficulty difficulty)
@@ -970,6 +993,8 @@ namespace zs.Assets.Scripts
             Debug.Assert(_fenceSW);
             Debug.Assert(_fenceW);
             Debug.Assert(_fenceNW);
+
+            Debug.Assert(_coinPrefab);
 
             Debug.Log("Game Awake");
             Instance = this;

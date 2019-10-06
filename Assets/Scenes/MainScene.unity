@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialSceneType: 0
   _initialSeed: 0
-  _initialLevel: 10
+  _initialLevel: 2
   _initialPlayerCount: 1
 --- !u!4 &11175836
 Transform:
@@ -1288,7 +1288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &425173807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2026,8 +2026,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5d96fd248b54cf146bcce9db85ba4fc8, type: 2}
   - {fileID: 11400000, guid: daf1f16238aa3fa4eb112fe4b9de95e4, type: 2}
   - {fileID: 11400000, guid: a5c5dba93fd62b94eb090d4b7fae6eac, type: 2}
+  - {fileID: 11400000, guid: bf9a386233780b0428477182beb68d9e, type: 2}
+  - {fileID: 11400000, guid: 963dbe404f5fc7b4ca6e4823584726ed, type: 2}
   _rockTiles:
   - {fileID: 11400000, guid: 0a7dbf0d5c6ef31438a3e7919abf096d, type: 2}
+  - {fileID: 11400000, guid: 072abee083a10fc408c0b0e326bcb7d8, type: 2}
+  - {fileID: 11400000, guid: 7decbfd124a05204cbec413745bb2904, type: 2}
   _fenceN: {fileID: 11400000, guid: f24fffb2e5f496c4dbc539b5783fb744, type: 2}
   _fenceNW: {fileID: 11400000, guid: 472f8f3dc006c9c43a153def7e2e7df7, type: 2}
   _fenceW: {fileID: 11400000, guid: 3dfacbce29ec053439cd91a1db50de24, type: 2}
@@ -2036,6 +2040,8 @@ MonoBehaviour:
   _fenceSE: {fileID: 11400000, guid: f23176f65107f724ba693a03ca6de299, type: 2}
   _fenceE: {fileID: 11400000, guid: ab28ea42a1e643b469e3475d5e408990, type: 2}
   _fenceNE: {fileID: 11400000, guid: 498378a1b2dd99c4ebe369c81e4e4353, type: 2}
+  _coinPrefab: {fileID: 7465954165872534857, guid: 8fa564c708d1dca42bb8f2ab2fb86fd6,
+    type: 3}
   _borderSize: 10
 --- !u!4 &847912456
 Transform:
