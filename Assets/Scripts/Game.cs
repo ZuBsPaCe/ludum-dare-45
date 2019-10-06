@@ -51,9 +51,6 @@ namespace zs.Assets.Scripts
         private int _playerCount = 1;
 
         [SerializeField]
-        private Difficulty _initialDifficulty = Difficulty.Hard;
-
-        [SerializeField]
         private int _borderSize = 10;
 
         #endregion Serializable Fields
@@ -85,7 +82,7 @@ namespace zs.Assets.Scripts
                 initialSeed = Guid.NewGuid().GetHashCode();
             }
 
-            Generate(initialSeed, _initialLevel, _initialDifficulty);
+            Generate(initialSeed, _initialLevel, Master.Instance.CurrentDifficulty);
         }
 
         #endregion Public Methods
@@ -107,16 +104,16 @@ namespace zs.Assets.Scripts
             Debug.Assert(_fenceHorTile);
             Debug.Assert(_fenceVerTile);
 
+            Debug.Log("Game Awake");
             Instance = this;
+
+            Physics2D.autoSimulation = false;
         }
 
-        void Start()
-        {
-            Generate(_initialSeed, _initialLevel, _initialDifficulty);
-        }
-	
         void Update()
         {
+            float physicStep = Mathf.Min(Time.deltaTime, 1f / 30f);
+            Physics2D.Simulate(physicStep);
         }
 
         #endregion MonoBehaviour

@@ -1,5 +1,4 @@
-﻿using UnityEditorInternal;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace zs.Assets.Scripts
 {
@@ -60,8 +59,6 @@ namespace zs.Assets.Scripts
 	
         void Awake()
         {
-            Debug.Assert(_followObject);
-
             Instance = this;
         }
 
@@ -75,7 +72,7 @@ namespace zs.Assets.Scripts
             {
                 transform.position = _followObject.position.with_z(transform.position.z);
             }
-            else if (_followObjects != null)
+            else if (_followObjects != null && _followObjects.Length > 0)
             {
                 Vector3 center = Vector3.zero;
                 foreach (Transform followObject in _followObjects)
