@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace zs.Assets.Scripts
 {
@@ -11,6 +12,9 @@ namespace zs.Assets.Scripts
 
         [SerializeField]
         private Transform _spritesRight  = null;
+
+        [SerializeField]
+        private Transform _sheepGrass  = null;
 
         #endregion Serializable Fields
 
@@ -25,11 +29,22 @@ namespace zs.Assets.Scripts
         private Vector2 _velocity = Vector2.zero;
         //private Vector2Int _lastTile = Vector2Int.zero;
 
+        private bool _eating = true;
+        private float _startEatTime = 0;
+        private bool _startedEatingAnimation = false;
+
         #endregion Private Vars
 
         #region Public Vars
 
         public bool IsAlive { get; private set; }
+
+        public bool IsEating
+        {
+            get { return _eating; }
+        }
+
+        public const float HearingDistance = 6f;
 
         #endregion Public Vars
 
@@ -42,9 +57,50 @@ namespace zs.Assets.Scripts
                 IsAlive = false;
                 _rigidbody.velocity = Vector2.zero;
 
+                StopEating();
+
                 _animator.SetBool("Dead", true);
 
                 Game.Instance.RegisterDeadSheep(this, player);
+            }
+        }
+
+        public void StopEating()
+        {
+            _eating = false;
+            _animator.SetBool("Eating", false);
+            _sheepGrass.gameObject.SetActive(false);
+        }
+
+        public void StartRunning(Player player)
+        {
+            StopEating();
+
+            if (Random.value < 0.5f)
+            {
+                // Horizontal movement
+
+                if (transform.position.x > player.transform.position.x)
+                {
+                    _velocity = Vector2.right * _speed;
+                }
+                else
+                {
+                    _velocity = Vector2.left * _speed;
+                }
+            }
+            else
+            {
+                // Vertical movement
+
+                if (transform.position.y > player.transform.position.y)
+                {
+                    _velocity = Vector2.up * _speed;
+                }
+                else
+                {
+                    _velocity = Vector2.down * _speed;
+                }
             }
         }
 
@@ -60,46 +116,49 @@ namespace zs.Assets.Scripts
             Debug.Assert(_rigidbody);
             Debug.Assert(_animator);
             Debug.Assert(_spritesRight);
+            Debug.Assert(_sheepGrass);
 
             IsAlive = true;
-        }
 
-        void Start()
-        {
+            _eating = true;
+            _startEatTime = Time.time + Random.Range(0f, 5f);
+
             if (Random.value < 0.5f)
             {
-                // Horizontal movement
-
-                if (transform.position.x > 0)
-                {
-                    _velocity = Vector2.right * _speed;
-                }
-                else
-                {
-                    _velocity = Vector2.left * _speed;
-                }
+                _spritesRight.localScale = _spritesRight.localScale.with_x(1);
             }
             else
             {
-                // Vertical movement
-
-                if (transform.position.y > 0)
-                {
-                    _velocity = Vector2.up * _speed;
-                }
-                else
-                {
-                    _velocity = Vector2.down * _speed;
-                }
+                _spritesRight.localScale = _spritesRight.localScale.with_x(-1);
             }
-
-            //_lastTile = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
         }
-	
+
         void Update()
         {
             if (!IsAlive)
             {
+                return;
+            }
+
+            if (_eating)
+            {
+                if (!_startedEatingAnimation && Time.time > _startEatTime)
+                {
+                    _animator.SetBool("Eating", true);
+                    _startedEatingAnimation = true;
+                }
+
+                if (Master.Instance.CurrentDifficulty == Difficulty.Hard)
+                {
+                    foreach (Player player in Game.Instance.Players)
+                    {
+                        if (Vector3.Distance(player.transform.position, transform.position) < HearingDistance)
+                        {
+                            StartRunning(player);
+                        }
+                    }
+                }
+
                 return;
             }
 
@@ -233,12 +292,12 @@ namespace zs.Assets.Scripts
             bool walkRight = false;
 
 
-            if (_velocity.x > 0)
+            if (_velocity.x > 0 || _velocity.y > 0)
             {
                 walkRight = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(1);
             }
-            else if (_velocity.x < 0)
+            else if (_velocity.x < 0 || _velocity.y < 0)
             {
                 walkLeft = true;
                 _spritesRight.localScale = _spritesRight.localScale.with_x(-1);

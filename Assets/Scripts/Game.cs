@@ -128,6 +128,25 @@ namespace zs.Assets.Scripts
             }
         }
 
+        public List<Player> Players
+        {
+            get { return _players; }
+        }
+
+        public void WakeUpSheep(Player player)
+        {
+            foreach (Sheep sheep in _sheep)
+            {
+                if (sheep.IsEating)
+                {
+                    if (Vector3.Distance(player.transform.position, sheep.transform.position) < Sheep.HearingDistance)
+                    {
+                        sheep.StartRunning(player);
+                    }
+                }
+            }
+        }
+
         #endregion Public Vars
 
         #region Public Methods
@@ -138,6 +157,10 @@ namespace zs.Assets.Scripts
 
             KilledSheep += 1;
 
+            if (Master.Instance.CurrentDifficulty == Difficulty.Easy)
+            {
+                WakeUpSheep(fromPlayer);
+            }
 
             int sheepAlive = 0;
 

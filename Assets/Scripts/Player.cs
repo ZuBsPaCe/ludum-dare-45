@@ -170,6 +170,11 @@ namespace zs.Assets.Scripts
                     {
                         _animator.SetBool("Fire", true);
                         _lastFireTime = Time.time;
+
+                        if (Master.Instance.CurrentDifficulty == Difficulty.Normal)
+                        {
+                            Game.Instance.WakeUpSheep(this);
+                        }
                     }
                 }
                 else

@@ -38,11 +38,15 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private PlayableAsset _timelineLevelFailed = null;
 
+        [SerializeField]
+        private Sheep _sheepPrefab = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
 
-        private PlayableDirector _playableDirector;
+        private PlayableDirector _playableDirector = null;
+        private Sheep _startScreenSheep = null;
 
         #endregion Private Vars
 
@@ -57,6 +61,23 @@ namespace zs.Assets.Scripts
         public void SetStartScreenActive(bool active)
         {
             _startScreen.gameObject.SetActive(active);
+
+            if (active)
+            {
+                if (_startScreenSheep == null)
+                {
+                    _startScreenSheep = Instantiate(_sheepPrefab, new Vector3(0, -2.5f, 0), Quaternion.identity);
+                    _startScreenSheep.transform.localScale = new Vector3(2f, 2f, 2f);
+                }
+            }
+            else
+            {
+                if (_startScreenSheep != null)
+                {
+                    Destroy(_startScreenSheep);
+                    _startScreenSheep = null;
+                }
+            }
         }
 
         public void StartGame()

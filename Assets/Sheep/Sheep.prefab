@@ -1,5 +1,84 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5067376704092806738
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2889700291781172692}
+  - component: {fileID: 3996022871699675411}
+  m_Layer: 0
+  m_Name: SheepGrass
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2889700291781172692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5067376704092806738}
+  m_LocalRotation: {x: 0, y: 0, z: 0.1740589, w: 0.9847353}
+  m_LocalPosition: {x: 0.172, y: -0.241, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5821313858147706790}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 20.048}
+--- !u!212 &3996022871699675411
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5067376704092806738}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1190250673
+  m_SortingLayer: 1
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 45a6cfdaa0830af4c8915c9527d351d3, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.28, y: 1.28}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &5821313858147706791
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,6 +115,7 @@ Transform:
   - {fileID: 5821313859490152020}
   - {fileID: 7806114269281734931}
   - {fileID: 1845709935513192271}
+  - {fileID: 2889700291781172692}
   m_Father: {fileID: 5821313858777953932}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -186,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _spritesRight: {fileID: 5821313859770346112}
+  _sheepGrass: {fileID: 2889700291781172692}
 --- !u!50 &5821313858481159252
 Rigidbody2D:
   serializedVersion: 4
@@ -1214,13 +1295,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6031482007061473568}
-  m_LocalRotation: {x: -0, y: -0, z: 0.18601473, w: 0.98254704}
+  m_LocalRotation: {x: 0, y: 0, z: 0.1860147, w: 0.982547}
   m_LocalPosition: {x: 0.077, y: 0.153, z: 0}
   m_LocalScale: {x: 0.45907527, y: 0.45907527, z: 0.45907527}
   m_Children: []
   m_Father: {fileID: 5821313858147706790}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 21.441002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 21.441}
 --- !u!212 &3631223609223007207
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1293,13 +1374,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7222909491924899255}
-  m_LocalRotation: {x: -0, y: -0, z: 0.1034645, w: 0.9946332}
+  m_LocalRotation: {x: 0, y: 0, z: 0.1034645, w: 0.9946332}
   m_LocalPosition: {x: -0.023, y: 0.114, z: 0}
   m_LocalScale: {x: 0.45405, y: 0.45405, z: 0.45405}
   m_Children: []
   m_Father: {fileID: 5821313858147706790}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 11.877001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 11.877}
 --- !u!212 &5475427227312869992
 SpriteRenderer:
   m_ObjectHideFlags: 0

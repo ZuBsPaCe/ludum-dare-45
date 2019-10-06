@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\TileType.cs" />
     <None Include="Assets\Sheep\Sprites\Right\sprites.txt" />
     <None Include="Assets\Player\Sprites\Left\sprites.txt" />
+    <None Include="Assets\Font\upirjump.txt" />
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>D:/code/personal/github.com/ludum-dare-45/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
