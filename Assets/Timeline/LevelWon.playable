@@ -16,15 +16,15 @@ MonoBehaviour:
   m_Tracks:
   - {fileID: 114308067109677888}
   - {fileID: 114456705689937014}
-  - {fileID: 114035300230829408}
   - {fileID: 114699386533153730}
   - {fileID: 114296144964508690}
+  - {fileID: 114054779838537170}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
   m_DurationMode: 0
   m_Version: 0
---- !u!114 &114035300230829408
+--- !u!114 &114054779838537170
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -34,7 +34,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1467732076, guid: 6a10b2909283487f913b00d94cd3faf5, type: 3}
-  m_Name: Animation Track
+  m_Name: Animation Track (1)
   m_EditorClassIdentifier: 
   m_Locked: 0
   m_Muted: 0
@@ -45,10 +45,10 @@ MonoBehaviour:
   m_Clips:
   - m_Start: 2.9999999999999973
     m_ClipIn: 0
-    m_Asset: {fileID: 114500109771364294}
+    m_Asset: {fileID: 114488708775560108}
     m_Duration: 1
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 114035300230829408}
+    m_ParentTrack: {fileID: 114054779838537170}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
@@ -110,7 +110,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 2.9999999999999973
-    m_DisplayName: FadeInBlack
+    m_DisplayName: FadeInGreen
     m_Version: 1
   m_Version: 2
   m_OpenClipPreExtrapolation: 0
@@ -411,7 +411,7 @@ MonoBehaviour:
     m_Version: 1
   m_Version: 2
   m_PostPlaybackState: 3
---- !u!114 &114500109771364294
+--- !u!114 &114488708775560108
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 2024714994, guid: 6a10b2909283487f913b00d94cd3faf5, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: d64da44f30bd9624d8d1c4f1af7b7612, type: 2}
+  m_Clip: {fileID: 7400000, guid: 3ac1b061b5056d74abde43e0bd2949aa, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
