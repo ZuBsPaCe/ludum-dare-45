@@ -23,6 +23,7 @@ namespace zs.Assets.Scripts
         FenceE,
         FenceNE,
         Rock,
+        Haystack,
         StartTile,
         SheepTile
     }

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Diagnostics;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace zs.Assets.Scripts
 {
@@ -12,6 +14,9 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private Transform _spritesLeft = null;
 
+        [SerializeField]
+        private Transform _pitchforkLeft = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
@@ -22,12 +27,31 @@ namespace zs.Assets.Scripts
         private bool _walkLeft = false;
         private bool _walkRight = false;
 
+        private float _lastFireTime = 0;
+
         #endregion Private Vars
 
         #region Public Vars
+
+        public bool HasPitchfork { get; private set; }
+
         #endregion Public Vars
 
         #region Public Methods
+
+        public void PickupPitchfork()
+        {
+            if (HasPitchfork)
+            {
+                Debug.Assert(false);
+                return;
+            }
+
+            HasPitchfork = true;
+
+            _pitchforkLeft.gameObject.SetActive(true);
+        }
+
         #endregion Public Methods
 
         #region MonoBehaviour
@@ -40,6 +64,8 @@ namespace zs.Assets.Scripts
             Debug.Assert(_rigidbody);
             Debug.Assert(_animator);
             Debug.Assert(_spritesLeft);
+
+            Debug.Assert(_pitchforkLeft);
         }
 
         void Start()
@@ -104,6 +130,23 @@ namespace zs.Assets.Scripts
             velocity = velocity.normalized * _speed;
 
             _rigidbody.velocity = velocity;
+
+
+            if (HasPitchfork)
+            {
+                if (Time.time - _lastFireTime > 0.5f)
+                {
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        _animator.SetBool("Fire", true);
+                        _lastFireTime = Time.time;
+                    }
+                }
+                else
+                {
+                    _animator.SetBool("Fire", false);
+                }
+            }
         }
 
         #endregion MonoBehaviour

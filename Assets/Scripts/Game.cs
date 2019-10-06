@@ -18,6 +18,9 @@ namespace zs.Assets.Scripts
         private Sheep _sheepPrefab = null;
 
         [SerializeField]
+        private Haystack _haystackPrefab = null;
+
+        [SerializeField]
         private Tilemap _baseTilemap = null;
 
         [SerializeField]
@@ -59,6 +62,7 @@ namespace zs.Assets.Scripts
 
         private List<Player> _players = new List<Player>();
         private List<Sheep> _sheep = new List<Sheep>();
+        private List<Haystack> _haystacks = new List<Haystack>();
 
         #endregion Private Vars
 
@@ -92,6 +96,7 @@ namespace zs.Assets.Scripts
         {
             Debug.Assert(_playerPrefab);
             Debug.Assert(_sheepPrefab);
+            Debug.Assert(_haystackPrefab);
             Debug.Assert(_baseTilemap);
             Debug.Assert(_wallTilemap);
 
@@ -138,6 +143,12 @@ namespace zs.Assets.Scripts
                 DestroyImmediate(sheep.gameObject);
             }
             _sheep.Clear();
+
+            foreach (Haystack haystack in _haystacks)
+            {
+                DestroyImmediate(haystack.gameObject);
+            }
+            _haystacks.Clear();
 
 
             // Reset Tilemaps
@@ -546,6 +557,26 @@ namespace zs.Assets.Scripts
                 }
             }
 
+            // Add Pitchfork
+            {
+                for (int i = 0; i < 1000; ++i)
+                {
+                    int x = Random.Range(0, map.Width);
+                    int y = Random.Range(0, map.Height);
+
+                    if (x >= minSpawnX && x <= maxSpawnX &&
+                        y >= minSpawnY && y <= maxSpawnY)
+                    {
+                        continue;
+                    }
+
+                    if (map.GetTile(x, y) == TileType.Open)
+                    {
+                        map.SetTile(x, y, TileType.Haystack);
+                        break;
+                    }
+                }
+            }
 
             // Add Blocked Tiles near Fences
             {
@@ -690,6 +721,14 @@ namespace zs.Assets.Scripts
                                 map.SetTile(x, y, TileType.Blocked);
                                 _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
                                 _wallTilemap.SetTile(new Vector3Int(x, y, 0), _rockTiles[Random.Range(0, _rockTiles.Length)]);
+                                break;
+
+                            case TileType.Haystack:
+                                map.SetTile(x, y, TileType.Open);
+                                _baseTilemap.SetTile(new Vector3Int(x, y, 0), _grassTiles[Random.Range(0, _grassTiles.Length)]);
+
+                                Haystack haystack = Instantiate(_haystackPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                                _haystacks.Add(haystack);
                                 break;
 
                             case TileType.StartTile:
