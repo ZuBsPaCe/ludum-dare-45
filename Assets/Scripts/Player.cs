@@ -17,6 +17,9 @@ namespace zs.Assets.Scripts
         [SerializeField]
         private Transform _pitchforkLeft = null;
 
+        [SerializeField]
+        private Woosh _wooshPrefab = null;
+
         #endregion Serializable Fields
 
         #region Private Vars
@@ -29,6 +32,7 @@ namespace zs.Assets.Scripts
         private bool _walkRight = false;
 
         private float _lastFireTime = 0;
+        private bool _spawnWoosh = false;
 
         #endregion Private Vars
 
@@ -86,6 +90,7 @@ namespace zs.Assets.Scripts
             Debug.Assert(_collider);
             Debug.Assert(_animator);
             Debug.Assert(_spritesLeft);
+            Debug.Assert(_wooshPrefab);
 
             Debug.Assert(_pitchforkLeft);
 
@@ -175,6 +180,20 @@ namespace zs.Assets.Scripts
             _rigidbody.velocity = velocity;
 
 
+            if (_spawnWoosh)
+            {
+                if (Time.time - _lastFireTime > 0.05f)
+                {
+                    Woosh woosh = Instantiate(_wooshPrefab, transform.position, Quaternion.identity);
+                    if (_spritesLeft.localScale.x < 0)
+                    {
+                        woosh.transform.localScale = new Vector3(-1, 1, 1);
+                    }
+
+                    _spawnWoosh = false;
+                }
+            }
+
             if (HasPitchfork)
             {
                 if (Time.time - _lastFireTime > 0.5f)
@@ -183,6 +202,7 @@ namespace zs.Assets.Scripts
                     {
                         _animator.SetBool("Fire", true);
                         _lastFireTime = Time.time;
+                        _spawnWoosh = true;
 
                         if (Master.Instance.CurrentDifficulty == Difficulty.Normal)
                         {

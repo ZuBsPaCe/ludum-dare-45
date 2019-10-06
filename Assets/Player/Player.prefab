@@ -288,6 +288,8 @@ MonoBehaviour:
   _speed: 5
   _spritesLeft: {fileID: 3110116595398892225}
   _pitchforkLeft: {fileID: 8236973806758215767}
+  _wooshPrefab: {fileID: 3850811143631785091, guid: 9b373c425007c5646b9b18137c8ef3e0,
+    type: 3}
 --- !u!95 &3110116594558466203
 Animator:
   serializedVersion: 3
