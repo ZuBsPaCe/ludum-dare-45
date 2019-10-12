@@ -56,16 +56,16 @@ public class SoundPlayer : MonoBehaviour
                 audioSource.PlayOneShot(_playerHit);
                 break;
             case Sound.Click:
-                audioSource.PlayOneShot(_click);
+                audioSource.PlayOneShot(_click, 0.1f);
                 break;
             case Sound.Bling:
-                audioSource.PlayOneShot(_bling, 0.7f);
+                audioSource.PlayOneShot(_bling, 0.1f);
                 break;
             case Sound.PlayerFire:
                 audioSource.PlayOneShot(_playerFire);
                 break;
             case Sound.ScoreBam:
-                audioSource.PlayOneShot(_scoreBam);
+                audioSource.PlayOneShot(_scoreBam, 0.1f);
                 break;
         }
     }
